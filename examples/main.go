@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 
 	"github.com/antoine2116/go-choruspro"
@@ -18,10 +19,18 @@ func main() {
 
 	ctx := context.Background()
 
-	taux, err := c.RecupererTauxTva(ctx, choruspro.RecupererTauxTvaParams{})
+	res, err := c.Transverses.ConsulterCompteRendu(ctx, choruspro.CompteRenduOptions{
+		NumeroFluxDepot: "",
+	})
+
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
 
-	log.Printf("Taux: %v", taux)
+	result, err := json.Marshal(res)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+
+	log.Printf("Final Response: %v", string(result))
 }

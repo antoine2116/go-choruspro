@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -49,9 +50,15 @@ type Client struct {
 
 	// Chorus Pro technical credentials (login:password base64 encoded)
 	login string
+
+	common service
+
+	// Services
+	Transverses *TransversesService
 }
 
-type OAuthParams struct {
+type service struct {
+	client *Client
 }
 
 type OAuthToken struct {
@@ -69,7 +76,7 @@ type OAuthToken struct {
 }
 
 func NewClient(config *ClientConfig) *Client {
-	return &Client{
+	c := &Client{
 		client:       http.DefaultClient,
 		url:          config.Url,
 		authUrl:      config.AuthUrl,
@@ -77,26 +84,14 @@ func NewClient(config *ClientConfig) *Client {
 		clientSecret: config.ClientSecret,
 		login:        config.Login,
 	}
+
+	c.initialize()
+	return c
 }
 
-func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface{}) error {
-	res, err := c.client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("error : status code %v", res.Status)
-	}
-
-	defer res.Body.Close()
-
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil
-	}
-
-	return json.Unmarshal(data, obj)
+func (c *Client) initialize() {
+	c.common.client = c
+	c.Transverses = (*TransversesService)(&c.common)
 }
 
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
@@ -107,6 +102,10 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 	}
 
 	data, err := json.Marshal(body)
+	
+	// Temp
+	log.Printf("Request body : \n%s", string(data))
+
 	if err != nil {
 		return nil, err
 	}
@@ -121,6 +120,34 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 	req.Header.Add("cpro-account", c.login)
 
 	return req, nil
+}
+
+func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface{}) error {
+	res, err := c.client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		if res.StatusCode == http.StatusBadRequest {
+			return parseError(res)
+		}
+
+		return fmt.Errorf("choruspro: %v", res.Status)
+	}
+
+	data, err := io.ReadAll(res.Body)
+	log.Printf("Response body : \n%s", string(data));
+	if err != nil {
+		return nil
+	}
+
+	return json.Unmarshal(data, obj)
+}
+
+type OAuthParams struct {
 }
 
 func getOAuthToken(authUrl, clientId, clientSecret string) (*OAuthToken, error) {
