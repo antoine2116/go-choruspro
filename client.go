@@ -102,7 +102,7 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 	}
 
 	data, err := json.Marshal(body)
-	
+
 	// Temp
 	log.Printf("Request body : \n%s", string(data))
 
@@ -139,7 +139,7 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 	}
 
 	data, err := io.ReadAll(res.Body)
-	log.Printf("Response body : \n%s", string(data));
+	log.Printf("Response body : \n%s", string(data))
 	if err != nil {
 		return nil
 	}
