@@ -60,3 +60,31 @@ func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (
 
 	return types, nil
 }
+
+type ListeTypesIdentifiantsStructure struct {
+	CodeRetour int32                      `json:"codeRetour"`
+	Libelle    string                     `json:"libelle"`
+	Types      []TypeIdentifiantStructure `json:"listeTypeIdentifiant"`
+}
+
+type TypeIdentifiantStructure struct {
+	Type string `json:"typeIdentifiantStructure"`
+}
+
+func (s *TransversesService) RecupererTypesIdentifiantsStructure(ctx context.Context) (*ListeTypesIdentifiantsStructure, error) {
+	opts := struct{}{}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/typeidentifiant/structure", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	types := new(ListeTypesIdentifiantsStructure)
+
+	err = s.client.doRequest(ctx, req, types)
+	if err != nil {
+		return nil, err
+	}
+
+	return types, nil
+}

@@ -3,20 +3,9 @@ package choruspro
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
-)
-
-type SyntaxeFlux string
-
-const (
-	SyntaxeFluxE1UblInvoice    SyntaxeFlux = "IN_DP_E1_UBL_INVOICE"
-	SyntaxeFluxE1Cii16B        SyntaxeFlux = "IN_DP_E1_CII_16B"
-	SyntaxeFluxE2UblInvoiceMin SyntaxeFlux = "IN_DP_E2_UBL_INVOICE_MIN"
-	SyntaxeFluxE2CppFactureMin SyntaxeFlux = "IN_DP_E2_CPP_FACTURE_MIN"
-	SyntaxeFluxE2CiiMin16B     SyntaxeFlux = "IN_DP_E2_CII_MIN_16B"
-	SyntaxeFluxE2CiiFacturx    SyntaxeFlux = "IN_DP_E2_CII_FACTURX"
-	SyntaxeFluxE3UblInvoice    SyntaxeFlux = "IN_DP_E3_UBL_INVOICE"
 )
 
 type ListeFormatsFlux struct {
@@ -87,6 +76,52 @@ func (s *TransversesService) ConsulterCompteRendu(ctx context.Context, opts Comp
 	}
 
 	formats := new(CompteRendu)
+
+	err = s.client.doRequest(ctx, req, formats)
+	if err != nil {
+		return nil, err
+	}
+
+	return formats, nil
+}
+
+type CompteRenduDetaille struct {
+	CodeInterfaceDepotFlux   string                  `json:"codeInterfaceDepotFlux,omitempty"`
+	CodeRetour               int32                   `json:"codeRetour"`
+	DateDepotFlux            *time.Time              `json:"dateDepotFlux,omitempty"`
+	DateHeureEtatCourantFlux *time.Time              `json:"dateHeureEtatCourantFlux,omitempty"`
+	EtatCourantDepotFlux     string                  `json:"etatCourantDepotFlux,omitempty"`
+	Libelle                  string                  `json:"libelle"`
+	NomFichier               string                  `json:"nomFichier,omitempty"`
+	ErreursDemandePaiement   []ErreurDemandePaiement `json:"listeErreurDP,omitempty"`
+	ErreursTechniques        []ErreurTechnique       `json:"listeErreurTechnique,omitempty"`
+}
+
+type CompteRenduDetailleOptions struct {
+	NumeroFluxDepot string      `json:"numeroFluxDepot"`
+	SyntaxeFlux     SyntaxeFlux `json:"syntaxeFlux,omitempty"`
+}
+
+func (o CompteRenduDetailleOptions) Validate() error {
+	if o.NumeroFluxDepot == "" {
+		return fmt.Errorf("choruspro: NumeroFluxDepot is required")
+	}
+
+	return nil
+}
+
+func (s *TransversesService) ConsulterCompteRenduDetaille(ctx context.Context, opts CompteRenduDetailleOptions) (*CompteRenduDetaille, error) {
+	err := opts.Validate()
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/consulterCRDetaille", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	formats := new(CompteRenduDetaille)
 
 	err = s.client.doRequest(ctx, req, formats)
 	if err != nil {

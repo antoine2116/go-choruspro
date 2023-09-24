@@ -89,49 +89,6 @@ func (s *TransversesService) RecupererModesDepot(ctx context.Context) (*ListeMod
 	return modes, nil
 }
 
-type ListeEtatsTypeDemandePaiement struct {
-	CodeRetour int32                     `json:"codeRetour"`
-	Libelle    string                    `json:"libelle"`
-	Etats      []EtatTypeDemandePaiement `json:"listeEtatDemandePaiement"`
-}
-
-type EtatTypeDemandePaiement struct {
-	Etat string `json:"etatDemandePaiement"`
-}
-
-type ListeEtatsTypeDemandePaiementOptions struct {
-	TypeDemandePaiement string `json:"typeDemandePaiement,omitempty"`
-}
-
-func (o *ListeEtatsTypeDemandePaiementOptions) Validate() error {
-	if o.TypeDemandePaiement == "" {
-		return errors.New("TypeDemandePaiement is required")
-	}
-
-	return nil
-}
-
-func (s *TransversesService) RecupererEtatParTypeDemandePaiement(ctx context.Context, opts ListeEtatsTypeDemandePaiementOptions) (*ListeEtatsTypeDemandePaiement, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/etat/typedp", opts)
-	if err != nil {
-		return nil, err
-	}
-
-	etats := new(ListeEtatsTypeDemandePaiement)
-
-	err = s.client.doRequest(ctx, req, etats)
-	if err != nil {
-		return nil, err
-	}
-
-	return etats, nil
-}
-
 type ListePays struct {
 	CodeRetour int32  `json:"codeRetour"`
 	Libelle    string `json:"libelle"`
@@ -201,4 +158,106 @@ func (s *TransversesService) RecupererMotifsRefusFactureAValider(ctx context.Con
 	}
 
 	return motifs, nil
+}
+
+type ListeModesReglement struct {
+	CodeRetour int32           `json:"codeRetour"`
+	Libelle    string          `json:"libelle"`
+	Modes      []ModeReglement `json:"listeModePaiement"`
+}
+
+type ModeReglement struct {
+	ModeReglement string `json:"modePaiement"`
+}
+
+func (s *TransversesService) RecupererModesReglement(ctx context.Context) (*ListeModesReglement, error) {
+	opts := struct{}{}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/modereglements", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	modes := new(ListeModesReglement)
+
+	err = s.client.doRequest(ctx, req, modes)
+	if err != nil {
+		return nil, err
+	}
+
+	return modes, nil
+}
+
+type ListeCadresFacturation struct {
+	CodeRetour int32              `json:"codeRetour"`
+	Libelle    string             `json:"libelle"`
+	Cadres     []CadreFacturation `json:"listeCadreFacturation"`
+}
+
+type CadreFacturation struct {
+	Code string `json:"codeCadreFacturation"`
+}
+
+func (s *TransversesService) RecupererCadresFacturation(ctx context.Context, typeDP string) (*ListeCadresFacturation, error) {
+	opts := struct {
+		TypeDemande string `json:"typeDemandePaiement,omitempty"`
+	}{TypeDemande: typeDP}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/cadrefacturation", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	cadres := new(ListeCadresFacturation)
+
+	err = s.client.doRequest(ctx, req, cadres)
+	if err != nil {
+		return nil, err
+	}
+
+	return cadres, nil
+}
+
+type ListeCoordonneesBancaires struct {
+	CodeRetour  int32                  `json:"codeRetour"`
+	Libelle     string                 `json:"libelle"`
+	Coordonnees []CoordonneesBancaires `json:"listeCoordonneeBancaire"`
+}
+
+type CoordonneesBancaires struct {
+	Id  int64  `json:"idCoordonneeBancaire"`
+	Nom string `json:"nomCoordonneeBancaire"`
+}
+
+type ListeCoordonneesBancairesOptions struct {
+	IdStructure int64 `json:"idStructure,omitempty"`
+}
+
+func (o ListeCoordonneesBancairesOptions) Validate() error {
+	if o.IdStructure == 0 {
+		return errors.New("IdStructure is required")
+	}
+
+	return nil
+}
+
+func (s *TransversesService) RecupererCoordonneesBancairesValides(ctx context.Context, opts ListeCoordonneesBancairesOptions) (*ListeCoordonneesBancaires, error) {
+	err := opts.Validate()
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/coordbanc/valides", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	coord := new(ListeCoordonneesBancaires)
+
+	err = s.client.doRequest(ctx, req, coord)
+	if err != nil {
+		return nil, err
+	}
+
+	return coord, nil
 }

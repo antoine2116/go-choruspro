@@ -14,10 +14,10 @@ type ListeCategoriesSollicitation struct {
 }
 
 type ListeCategoriesSollicitationOptions struct {
-	Code       string            `json:"codeCategorie,omitempty"`
-	EstActif   bool              `json:"estActif,omitempty"`
-	Libelle    string            `json:"libelleCategorie,omitempty"`
-	Pagination PaginationOptions `json:"pagination,omitempty"`
+	Code       string             `json:"codeCategorie,omitempty"`
+	EstActif   bool               `json:"estActif,omitempty"`
+	Libelle    string             `json:"libelleCategorie,omitempty"`
+	Pagination *PaginationOptions `json:"pagination,omitempty"`
 }
 
 func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Context, opts ListeCategoriesSollicitationOptions) (*ListeCategoriesSollicitation, error) {

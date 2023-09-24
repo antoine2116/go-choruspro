@@ -116,3 +116,41 @@ func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, sir
 
 	return infos, nil
 }
+
+type ListeDestinataires struct {
+	CodeRetour    int32              `json:"codeRetour"`
+	Libelle       string             `json:"libelle"`
+	Destinataires []Destinataire     `json:"listeDestinataires"`
+	Pagination    PaginationResponse `json:"parametresRetour"`
+}
+
+type Destinataire struct {
+	IdStructureCPP    int64  `json:"idStructureCPP"`
+	Siret             string `json:"siret"`
+	Nom               string `json:"nomDestinataire,omitempty"`
+	AdresseCodePostal string `json:"adresseCodePostal,omitempty"`
+	AdresseVille      string `json:"adresseVille,omitempty"`
+}
+
+type ListeDestinatairesOptions struct {
+	Identifiant        string             `json:"identifiant,omitempty"`
+	NomVilleCodePostal string             `json:"nomVilleCodePostal,omitempty"`
+	TypeStructure      string             `json:"typeStructure,omitempty"`
+	Pagination         *PaginationOptions `json:"parametresRecherche,omitempty"`
+}
+
+func (s *TransversesService) RechercherDestinataires(ctx context.Context, opts ListeDestinatairesOptions) (*ListeDestinataires, error) {
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/rechercher/destinataire", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	destinataires := new(ListeDestinataires)
+
+	err = s.client.doRequest(ctx, req, destinataires)
+	if err != nil {
+		return nil, err
+	}
+
+	return destinataires, nil
+}

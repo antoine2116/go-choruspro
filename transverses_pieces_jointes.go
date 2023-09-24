@@ -115,3 +115,53 @@ func (s *TransversesService) RechercherPiecesJointesStructure(ctx context.Contex
 
 	return pieces, nil
 }
+
+type AjouterPieceResponse struct {
+	CodeRetour    int32  `json:"codeRetour"`
+	Libelle       string `json:"libelle"`
+	PieceJointeId int64  `json:"pieceJointeId"`
+}
+
+type AjouterPieceOptions struct {
+	IdUtilisateurCourant int64  `json:"idUtilisateurCourant,omitempty"`
+	Extension            string `json:"pieceJointeExtension"`
+	Fichier              string `json:"pieceJointeFichier"`
+	Nom                  string `json:"pieceJointeNom"`
+	TypeMime             string `json:"pieceJointeTypeMime"`
+}
+
+func (o AjouterPieceOptions) Validate() error {
+	if o.Extension == "" {
+		return errors.New("choruspro: Extension is required")
+	}
+
+	if o.Fichier == "" {
+		return errors.New("choruspro: Fichier is required")
+	}
+
+	if o.Nom == "" {
+		return errors.New("choruspro: Nom is required")
+	}
+
+	if o.TypeMime == "" {
+		return errors.New("choruspro: TypeMime is required")
+	}
+
+	return nil
+}
+
+func (s *TransversesService) AjouterPieceJointe(ctx context.Context, opts AjouterPieceOptions) (*AjouterPieceResponse, error) {
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/ajouter/fichier", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	piece := new(AjouterPieceResponse)
+
+	err = s.client.doRequest(ctx, req, piece)
+	if err != nil {
+		return nil, err
+	}
+
+	return piece, nil
+}
