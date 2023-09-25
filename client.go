@@ -10,6 +10,9 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
+
+	"golang.org/x/oauth2"
 )
 
 // ClientConfig contains the configuration for the client
@@ -48,9 +51,13 @@ type Client struct {
 	// Piste client secret
 	clientSecret string
 
-	// Chorus Pro technical credentials (login:password base64 encoded)
+	// OAuth token used for authentication
+	token *oauth2.Token
+
+	// Chorus Pro technical account credentials (login:password base64 encoded)
 	login string
 
+	// Shared between services
 	common service
 
 	// Services
@@ -59,20 +66,6 @@ type Client struct {
 
 type service struct {
 	client *Client
-}
-
-type OAuthToken struct {
-	// AccessToken is the token that authorizes and authenticates the requests
-	AccessToken string `json:"access_token"`
-
-	// TokenType is the type of token.
-	TokenType string `json:"token_type,omitempty"`
-
-	// ExpiresIn is the optional expiration time of the access token.
-	ExpiresIn int16 `json:"expires_in,omitempty"`
-
-	//  Scope specifies optional requested permissions.
-	Scope string `json:"scope,omitempty"`
 }
 
 func NewClient(config *ClientConfig) *Client {
@@ -95,10 +88,15 @@ func (c *Client) initialize() {
 }
 
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
-	// TODO : cache management
-	token, err := getOAuthToken(c.authUrl, c.clientId, c.clientSecret)
-	if err != nil {
-		return nil, err
+	// Check if token is valid, if not, get a new one
+	if !c.token.Valid() {
+		token, err := getOAuthToken(c.authUrl, c.clientId, c.clientSecret)
+		if err != nil {
+			return nil, err
+		}
+
+		// Update token
+		c.token = token
 	}
 
 	data, err := json.Marshal(body)
@@ -115,7 +113,7 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", token.AccessToken))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.token.AccessToken))
 	req.Header.Add("Content-Type", "application/json;charset=utf-8")
 	req.Header.Add("cpro-account", c.login)
 
@@ -147,10 +145,7 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 	return json.Unmarshal(data, obj)
 }
 
-type OAuthParams struct {
-}
-
-func getOAuthToken(authUrl, clientId, clientSecret string) (*OAuthToken, error) {
+func getOAuthToken(authUrl, clientId, clientSecret string) (*oauth2.Token, error) {
 	c := http.DefaultClient
 
 	data := url.Values{}
@@ -167,18 +162,28 @@ func getOAuthToken(authUrl, clientId, clientSecret string) (*OAuthToken, error) 
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
+	var token struct {
+		AccessToken string `json:"access_token"`
+		TokenType   string `json:"token_type,omitempty"`
+		ExpiresIn   int16  `json:"expires_in,omitempty"`
+	}
+
 	res, err := c.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
-	token := OAuthToken{}
-
 	err = json.NewDecoder(res.Body).Decode(&token)
 	if err != nil {
 		return nil, err
 	}
 
-	return &token, nil
+	tok := &oauth2.Token{
+		AccessToken: token.AccessToken,
+		TokenType:   token.TokenType,
+		Expiry:      time.Now().Add(time.Duration(token.ExpiresIn) * time.Second),
+	}
+
+	return tok, nil
 }
