@@ -6,6 +6,28 @@ import (
 	"net/http"
 )
 
+type HealthCheck struct {
+	Body            string `json:"body"`
+	StatusCodeValue int    `json:"statusCodeValue"`
+	StatusCode      string `json:"statusCode"`
+}
+
+func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, error) {
+	req, err := s.client.newRequest(ctx, http.MethodGet, "/cpro/transverses/v1/health-check", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	hc := new(HealthCheck)
+
+	err = s.client.doRequest(ctx, req, hc)
+	if err != nil {
+		return nil, err
+	}
+
+	return hc, nil
+}
+
 type ListeDevises struct {
 	CodeRetour int32    `json:"codeRetour"`
 	Libelle    string   `json:"libelle"`

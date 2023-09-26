@@ -36,6 +36,24 @@ func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx contex
 	return structures, nil
 }
 
+func (s *TransversesService) RecupererStructuresActivesDestinataireFactureTravaux(ctx context.Context) (*ListeStrcturesActives, error) {
+	opts := struct{}{}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	structures := new(ListeStrcturesActives)
+
+	err = s.client.doRequest(ctx, req, structures)
+	if err != nil {
+		return nil, err
+	}
+
+	return structures, nil
+}
+
 func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.Context) (*ListeStrcturesActives, error) {
 	opts := struct{}{}
 
