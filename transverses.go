@@ -1,7 +1,10 @@
 package choruspro
 
+// TransversesService gère les appels à l'API Transverses
+// API docs : https://developer.aife.economie.gouv.fr/api-catalog-sandbox?filter=Transverses
 type TransversesService service
 
+// Liste des langues disponibles
 type CodeLangue string
 
 const (
@@ -9,6 +12,7 @@ const (
 	CodeLangueEn CodeLangue = "EN"
 )
 
+// Liste des syntaxes de flux disponibles
 type SyntaxeFlux string
 
 const (
