@@ -18,7 +18,7 @@ import (
 // ClientConfig contains the configuration for the client
 type ClientConfig struct {
 	// Piste URL
-	Url string
+	BaseUrl string
 
 	// Piste OAuth URL
 	AuthUrl string
@@ -40,10 +40,10 @@ type Client struct {
 	client *http.Client
 
 	// Piste URL
-	url string
+	BaseUrl string
 
 	// Piste OAuth URL
-	authUrl string
+	AuthUrl string
 
 	// Piste client ID
 	clientId string
@@ -68,17 +68,19 @@ type service struct {
 	client *Client
 }
 
-func NewClient(config *ClientConfig) *Client {
-	c := &Client{
-		client:       http.DefaultClient,
-		url:          config.Url,
-		authUrl:      config.AuthUrl,
-		clientId:     config.ClientId,
-		clientSecret: config.ClientSecret,
-		login:        config.Login,
-	}
-
+func NewClient() *Client {
+	c := &Client{client: http.DefaultClient}
 	c.initialize()
+	return c
+}
+
+func (c *Client) WithConfig(config *ClientConfig) *Client {
+	c.BaseUrl = config.BaseUrl
+	c.AuthUrl = config.AuthUrl
+	c.clientId = config.ClientId
+	c.clientSecret = config.ClientSecret
+	c.login = config.Login
+
 	return c
 }
 
@@ -90,7 +92,7 @@ func (c *Client) initialize() {
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
 	// Check if token is valid, if not, get a new one
 	if !c.token.Valid() {
-		token, err := getOAuthToken(c.authUrl, c.clientId, c.clientSecret)
+		token, err := getOAuthToken(c.AuthUrl, c.clientId, c.clientSecret)
 		if err != nil {
 			return nil, err
 		}
@@ -108,7 +110,7 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, method, c.url+url, bytes.NewBuffer(data))
+	req, err := http.NewRequestWithContext(ctx, method, c.BaseUrl+url, bytes.NewBuffer(data))
 	if err != nil {
 		return nil, err
 	}
@@ -173,6 +175,16 @@ func getOAuthToken(authUrl, clientId, clientSecret string) (*oauth2.Token, error
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("choruspro: %v", res.Status)
+	}
+
+	data2, err := io.ReadAll(res.Body)
+	log.Printf("Response body : \n%s", string(data2))
+	if err != nil {
+		return nil, err
+	}
 
 	err = json.NewDecoder(res.Body).Decode(&token)
 	if err != nil {

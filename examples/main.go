@@ -9,13 +9,15 @@ import (
 )
 
 func main() {
-	c := choruspro.NewClient(&choruspro.ClientConfig{
-		Url:          "<piste_url>",
+	cfg := &choruspro.ClientConfig{
+		BaseUrl:      "<piste_url>",
 		AuthUrl:      "<piste_oauth_url>",
 		ClientId:     "<piste_client_id>",
 		ClientSecret: "<piste_client_secret>",
 		Login:        "<chorus_pro_technical_credentials>",
-	})
+	}
+
+	c := choruspro.NewClient().WithConfig(cfg)
 
 	ctx := context.Background()
 

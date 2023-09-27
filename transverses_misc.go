@@ -7,9 +7,9 @@ import (
 )
 
 type HealthCheck struct {
-	Body            string `json:"body"`
-	StatusCodeValue int    `json:"statusCodeValue"`
-	StatusCode      string `json:"statusCode"`
+	Body            string `json:"body,omitempty"`
+	StatusCodeValue int    `json:"statusCodeValue,omitempty"`
+	StatusCode      string `json:"statusCode,omitempty"`
 }
 
 func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, error) {
