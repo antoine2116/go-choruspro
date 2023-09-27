@@ -6,12 +6,15 @@ import (
 	"net/http"
 )
 
+// HealthCheck réprésente la réponse retournée par 
+// TransversesService.HealthCheck
 type HealthCheck struct {
 	Body            string `json:"body"`
 	StatusCodeValue int    `json:"statusCodeValue"`
 	StatusCode      string `json:"statusCode"`
 }
 
+// HealthCheck permet de vérifier que l'API est accessible
 func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, error) {
 	req, err := s.client.newRequest(ctx, http.MethodGet, "/cpro/transverses/v1/health-check", nil)
 	if err != nil {
@@ -28,30 +31,7 @@ func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, err
 	return hc, nil
 }
 
-type HealthCheck struct {
-	Body            string `json:"body"`
-	StatusCodeValue int    `json:"statusCodeValue"`
-	StatusCode      string `json:"statusCode"`
-}
-
-func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, error) {
-	req, err := s.client.newRequest(ctx, http.MethodGet, "/cpro/transverses/v1/health-check", nil)
-	if err != nil {
-		return nil, err
-	}
-
-	hc := new(HealthCheck)
-
-	err = s.client.doRequest(ctx, req, hc)
-	if err != nil {
-		return nil, err
-	}
-
-	return hc, nil
-}
-
-
-// ListeDevises réprésente la réponse retournée par 
+// ListeDevises réprésente la réponse retournée par
 // TransversesService.RecupererDevises
 type ListeDevises struct {
 	CodeRetour int32    `json:"codeRetour"`
@@ -65,10 +45,10 @@ type Devise struct {
 	Libelle string `json:"libelleDevise"`
 }
 
-// RecupererDevises permet récupérer la liste des codes devises pouvant 
-// être renseignés lors de la saisie dans une facture. lang est la langue dans 
-// laquelle les devises seront retournées. Si lang n'est pas spécifié, la langue 
-/// par défaut est le français (CodeLangueFr)
+// RecupererDevises permet de récupérer la liste des codes devises pouvant
+// être renseignés lors de la saisie dans une facture. lang est la langue dans
+// laquelle les devises seront retournées. Si lang n'est pas spécifié, la langue
+// / par défaut est le français (CodeLangueFr)
 func (s *TransversesService) RecupererDevises(ctx context.Context, lang CodeLangue) (*ListeDevises, error) {
 	opts := &struct {
 		CodeLangue CodeLangue `json:"codeLangue,omitempty"`
@@ -89,9 +69,9 @@ func (s *TransversesService) RecupererDevises(ctx context.Context, lang CodeLang
 	return devise, nil
 }
 
-// Annuaire réprésente la réponse retournée par 
+// Annuaire réprésente la réponse retournée par
 // TransversesService.TelechargerAnnuaireDestinataire
-// Le contenu de l'annuaire est encodé en base64
+// Le contenu de l'annuaire est encodé en base64 dans le champ Fichier
 type AnnuaireDestinataire struct {
 	CodeRetour int32  `json:"codeRetour"`
 	Libelle    string `json:"libelle"`
@@ -99,7 +79,7 @@ type AnnuaireDestinataire struct {
 }
 
 // TelechargerAnnuaireDestinataire permet de télécharger l'annuaire des
-// destinataires. Le fichier est retourné encodé en base64.
+// destinataires.
 func (s *TransversesService) TelechargerAnnuaireDestinataire(ctx context.Context) (*AnnuaireDestinataire, error) {
 	opts := struct{}{}
 
@@ -187,7 +167,6 @@ func (s *TransversesService) RecupererPays(ctx context.Context, lang CodeLangue)
 	return pays, nil
 }
 
-
 // ListeMotifsRefusFactureAValider réprésente la réponse retournée par
 // TransversesService.RecupererMotifsRefusFactureAValider
 type ListeMotifsRefusFactureAValider struct {
@@ -223,7 +202,7 @@ func (s *TransversesService) RecupererMotifsRefusFactureAValider(ctx context.Con
 	if err != nil {
 		return nil, err
 	}
-	
+
 	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/motifs/refus/Facture/AValider", opts)
 	if err != nil {
 		return nil, err
@@ -247,7 +226,7 @@ type ListeModesReglement struct {
 	Modes      []ModeReglement `json:"listeModePaiement"`
 }
 
-// Mode Reglement représente un mode de réglement
+// ModeReglement représente un mode de réglement
 type ModeReglement struct {
 	ModeReglement string `json:"modePaiement"`
 }
@@ -281,7 +260,6 @@ type ListeCadresFacturation struct {
 	Cadres     []CadreFacturation `json:"listeCadreFacturation"`
 }
 
-
 // CadreFacturation représente un cadre de facturation
 type CadreFacturation struct {
 	Code string `json:"codeCadreFacturation"`
@@ -314,8 +292,8 @@ func (s *TransversesService) RecupererCadresFacturation(ctx context.Context, typ
 // ListeCoordonnesBancaires réprésente la réponse retournée par
 // TransversesService.RecupererCoordonneesBancairesValides
 type ListeCoordonneesBancaires struct {
-	CodeRetour  int32                  `json:"codeRetour"`
-	Libelle     string                 `json:"libelle"`
+	CodeRetour  int32                `json:"codeRetour"`
+	Libelle     string               `json:"libelle"`
 	Coordonnees []CoordonneeBancaire `json:"listeCoordonneeBancaire"`
 }
 
