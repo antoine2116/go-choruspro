@@ -58,7 +58,7 @@ type ListeTypesPieceJointeOptions struct {
 }
 
 func (s *TransversesService) RecupererTypesPieceJointe(ctx context.Context, opts ListeTypesPieceJointeOptions) (*ListeTypesPieceJointe, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/typespj", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typespj", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (o AjouterPieceOptions) Validate() error {
 }
 
 func (s *TransversesService) AjouterPieceJointe(ctx context.Context, opts AjouterPieceOptions) (*AjouterPieceResponse, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/ajouter/fichier", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/ajouter/fichier", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (s *TransversesService) RechercherPiecesJointesStructure(ctx context.Contex
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/rechercher/pj/structure", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/pj/structure", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +218,7 @@ func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Contex
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/rechercher/pj/moncompte", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/pj/moncompte", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -348,7 +348,7 @@ func (s *TransversesService) TelechargerPieceJointe(ctx context.Context, opts Te
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/telecharger/pieceJointe", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/telecharger/pieceJointe", opts)
 	if err != nil {
 		return nil, err
 	}

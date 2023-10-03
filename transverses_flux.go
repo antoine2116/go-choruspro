@@ -21,7 +21,7 @@ type FormatFlux struct {
 func (s *TransversesService) RecupererFormatFlux(ctx context.Context) (*ListeFormatsFlux, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/formatflux", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/formatflux", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (s *TransversesService) ConsulterCompteRendu(ctx context.Context, opts Comp
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/consulterCR", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/consulterCR", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (s *TransversesService) ConsulterCompteRenduDetaille(ctx context.Context, o
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/consulterCRDetaille", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/consulterCRDetaille", opts)
 	if err != nil {
 		return nil, err
 	}

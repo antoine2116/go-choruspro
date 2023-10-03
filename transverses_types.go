@@ -18,7 +18,7 @@ type TypeDemandePaiement struct {
 func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) (*ListeTypesDemandePaiement, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/typedp", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typedp", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ type TypeFactureTravaux struct {
 func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (*ListeTypesFactureTravaux, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/typefacturetravaux", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typefacturetravaux", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ type TypeIdentifiantStructure struct {
 func (s *TransversesService) RecupererTypesIdentifiantsStructure(ctx context.Context) (*ListeTypesIdentifiantsStructure, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/typeidentifiant/structure", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typeidentifiant/structure", opts)
 	if err != nil {
 		return nil, err
 	}

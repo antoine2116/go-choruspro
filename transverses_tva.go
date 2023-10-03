@@ -22,7 +22,7 @@ func (s *TransversesService) RecupererTauxTva(ctx context.Context, lang CodeLang
 		CodeLangue CodeLangue `json:"codeLangue,omitempty"`
 	}{CodeLangue: lang}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/tauxtva", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/tauxtva", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (s *TransversesService) RecupererMotifsExonerationTva(ctx context.Context, 
 		CodeLangue CodeLangue `json:"codeLangue,omitempty"`
 	}{CodeLangue: lang}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/motifs/exonerationtva", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/motifs/exonerationtva", opts)
 	if err != nil {
 		return nil, err
 	}

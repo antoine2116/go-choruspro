@@ -12,7 +12,10 @@ const (
 	CodeLangueEn CodeLangue = "EN"
 )
 
-// Liste des syntaxes de flux disponibles
+type codeLangueOptions struct {
+	CodeLangue CodeLangue `json:"codeLangue,omitempty"`
+}
+
 type SyntaxeFlux string
 
 const (
