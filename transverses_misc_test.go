@@ -507,7 +507,7 @@ func TestTransversesService_RecupererCoordonneesBancairesValides(t *testing.T) {
 	want := &ListeCoordonneesBancaires{
 		CodeRetour: 0,
 		Libelle:    "GCU_MSG_01_000",
-		Coordonnees: []CoordonneesBancaires{{
+		Coordonnees: []CoordonneeBancaire{{
 			Id:  1,
 			Nom: "n1",
 		}, {
