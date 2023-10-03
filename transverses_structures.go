@@ -21,7 +21,7 @@ type StructureActive struct {
 func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx context.Context) (*ListeStrcturesActives, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/structures/actives/facturetravaux", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/facturetravaux", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx contex
 func (s *TransversesService) RecupererStructuresActivesDestinataireFactureTravaux(ctx context.Context) (*ListeStrcturesActives, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (s *TransversesService) RecupererStructuresActivesDestinataireFactureTravau
 func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.Context) (*ListeStrcturesActives, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/structures/actives/fournisseur", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/fournisseur", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.C
 func (s *TransversesService) RecupererStructuresActivesDestinataire(ctx context.Context) (*ListeStrcturesActives, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, sir
 		SiretStrucutre string `json:"siretStructure"`
 	}{SiretStrucutre: siret}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/consulter/information/siret", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/consulter/information/siret", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ type ListeDestinatairesOptions struct {
 }
 
 func (s *TransversesService) RechercherDestinataires(ctx context.Context, opts ListeDestinatairesOptions) (*ListeDestinataires, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/rechercher/destinataire", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/destinataire", opts)
 	if err != nil {
 		return nil, err
 	}

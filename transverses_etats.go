@@ -34,7 +34,7 @@ func (s *TransversesService) RecupererEtatParTypeDemandePaiement(ctx context.Con
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/etat/typedp", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/etat/typedp", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (s *TransversesService) RecupererEtatsTraitement(ctx context.Context, opts 
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/etats/traitement", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/etats/traitement", opts)
 	if err != nil {
 		return nil, err
 	}

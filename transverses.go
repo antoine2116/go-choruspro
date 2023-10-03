@@ -9,6 +9,10 @@ const (
 	CodeLangueEn CodeLangue = "EN"
 )
 
+type codeLangueOptions struct {
+	CodeLangue CodeLangue `json:"codeLangue,omitempty"`
+}
+
 type SyntaxeFlux string
 
 const (

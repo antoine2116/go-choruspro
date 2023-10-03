@@ -40,10 +40,10 @@ type Client struct {
 	client *http.Client
 
 	// Piste URL
-	BaseUrl string
+	BaseUrl *url.URL
 
 	// Piste OAuth URL
-	AuthUrl string
+	AuthUrl *url.URL
 
 	// Piste client ID
 	clientId string
@@ -74,14 +74,24 @@ func NewClient() *Client {
 	return c
 }
 
-func (c *Client) WithConfig(config *ClientConfig) *Client {
-	c.BaseUrl = config.BaseUrl
-	c.AuthUrl = config.AuthUrl
+func (c *Client) WithConfig(config *ClientConfig) (*Client, error) {
+	var err error
+
+	c.BaseUrl, err = url.Parse(config.BaseUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	c.AuthUrl, err = url.Parse(config.AuthUrl)
+	if err != nil {
+		return nil, err
+	}
+
 	c.clientId = config.ClientId
 	c.clientSecret = config.ClientSecret
 	c.login = config.Login
 
-	return c
+	return c, err
 }
 
 func (c *Client) initialize() {
@@ -90,9 +100,18 @@ func (c *Client) initialize() {
 }
 
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
+	if !strings.HasSuffix(c.BaseUrl.Path, "/") {
+		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseUrl)
+	}
+
+	u, err := c.BaseUrl.Parse(url)
+	if err != nil {
+		return nil, err
+	}
+
 	// Check if token is valid, if not, get a new one
 	if !c.token.Valid() {
-		token, err := getOAuthToken(c.AuthUrl, c.clientId, c.clientSecret)
+		token, err := getOAuthToken(c.clientId, c.clientSecret, c.AuthUrl)
 		if err != nil {
 			return nil, err
 		}
@@ -110,7 +129,7 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 		return nil, err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, method, c.BaseUrl+url, bytes.NewBuffer(data))
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), bytes.NewBuffer(data))
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +166,12 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 	return json.Unmarshal(data, obj)
 }
 
-func getOAuthToken(authUrl, clientId, clientSecret string) (*oauth2.Token, error) {
+func getOAuthToken(clientId, clientSecret string, authUrl *url.URL) (*oauth2.Token, error) {
+	u, err := authUrl.Parse("api/oauth/token")
+	if err != nil {
+		return nil, err
+	}
+
 	c := http.DefaultClient
 
 	data := url.Values{}
@@ -157,7 +181,7 @@ func getOAuthToken(authUrl, clientId, clientSecret string) (*oauth2.Token, error
 
 	encodedData := data.Encode()
 
-	req, err := http.NewRequest(http.MethodPost, authUrl+"/api/oauth/token", strings.NewReader(encodedData))
+	req, err := http.NewRequest(http.MethodPost, u.String(), strings.NewReader(encodedData))
 	if err != nil {
 		return nil, err
 	}
@@ -178,12 +202,6 @@ func getOAuthToken(authUrl, clientId, clientSecret string) (*oauth2.Token, error
 
 	if res.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("choruspro: %v", res.Status)
-	}
-
-	data2, err := io.ReadAll(res.Body)
-	log.Printf("Response body : \n%s", string(data2))
-	if err != nil {
-		return nil, err
 	}
 
 	err = json.NewDecoder(res.Body).Decode(&token)

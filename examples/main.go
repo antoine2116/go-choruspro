@@ -17,14 +17,14 @@ func main() {
 		Login:        "<chorus_pro_technical_credentials>",
 	}
 
-	c := choruspro.NewClient().WithConfig(cfg)
+	c, err := choruspro.NewClient().WithConfig(cfg)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
 
 	ctx := context.Background()
 
-	res, err := c.Transverses.ConsulterCompteRendu(ctx, choruspro.CompteRenduOptions{
-		NumeroFluxDepot: "",
-	})
-
+	res, err := c.Transverses.RecupererDevises(ctx, choruspro.CodeLangueFr)
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}

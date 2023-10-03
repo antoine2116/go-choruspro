@@ -13,7 +13,7 @@ type HealthCheck struct {
 }
 
 func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, error) {
-	req, err := s.client.newRequest(ctx, http.MethodGet, "/cpro/transverses/v1/health-check", nil)
+	req, err := s.client.newRequest(ctx, http.MethodGet, "cpro/transverses/v1/health-check", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -40,11 +40,8 @@ type Devise struct {
 }
 
 func (s *TransversesService) RecupererDevises(ctx context.Context, lang CodeLangue) (*ListeDevises, error) {
-	opts := &struct {
-		CodeLangue CodeLangue `json:"codeLangue,omitempty"`
-	}{CodeLangue: lang}
-
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/devises", opts)
+	opts := &codeLangueOptions{lang}
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/devises", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +65,7 @@ type AnnuaireDestinataire struct {
 func (s *TransversesService) TelechargerAnnuaireDestinataire(ctx context.Context) (*AnnuaireDestinataire, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/telecharger/annuaire/destinataire", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/telecharger/annuaire/destinataire", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +93,7 @@ type ModeDepot struct {
 func (s *TransversesService) RecupererModesDepot(ctx context.Context) (*ListeModesDepot, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/modedepot", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/modedepot", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -123,11 +120,8 @@ type Pays struct {
 }
 
 func (s *TransversesService) RecupererPays(ctx context.Context, lang CodeLangue) (*ListePays, error) {
-	opts := &struct {
-		CodeLangue CodeLangue `json:"codeLangue,omitempty"`
-	}{CodeLangue: lang}
-
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/pays", opts)
+	opts := &codeLangueOptions{lang}
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/pays", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +161,12 @@ func (o *ListeMotifsRefusFactureAValiderOptions) Validate() error {
 }
 
 func (s *TransversesService) RecupererMotifsRefusFactureAValider(ctx context.Context, opts ListeMotifsRefusFactureAValiderOptions) (*ListeMotifsRefusFactureAValider, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/motifs/refus/Facture/AValider", opts)
+	err := opts.Validate()
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/motifs/refus/Facture/AValider", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -195,7 +194,7 @@ type ModeReglement struct {
 func (s *TransversesService) RecupererModesReglement(ctx context.Context) (*ListeModesReglement, error) {
 	opts := struct{}{}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/modereglements", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/modereglements", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +224,7 @@ func (s *TransversesService) RecupererCadresFacturation(ctx context.Context, typ
 		TypeDemande string `json:"typeDemandePaiement,omitempty"`
 	}{TypeDemande: typeDP}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/cadrefacturation", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/cadrefacturation", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -269,7 +268,7 @@ func (s *TransversesService) RecupererCoordonneesBancairesValides(ctx context.Co
 		return nil, err
 	}
 
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/recuperer/coordbanc/valides", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/coordbanc/valides", opts)
 	if err != nil {
 		return nil, err
 	}

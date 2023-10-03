@@ -21,7 +21,7 @@ type ListeCategoriesSollicitationOptions struct {
 }
 
 func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Context, opts ListeCategoriesSollicitationOptions) (*ListeCategoriesSollicitation, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/rechercher/categorieSollicitation", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/categorieSollicitation", opts)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ type ListeSousCategoriesSollicitationOptions struct {
 }
 
 func (s *TransversesService) RechercherSousCategoriesSollicitation(ctx context.Context, opts ListeSousCategoriesSollicitationOptions) (*ListeSousCategoriesSollicitation, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "/cpro/transverses/v1/rechercher/sousCategorieSollicitation", opts)
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/sousCategorieSollicitation", opts)
 	if err != nil {
 		return nil, err
 	}
