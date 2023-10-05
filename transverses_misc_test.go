@@ -28,7 +28,7 @@ func TestTransversesService_Healthcheck(t *testing.T) {
 		t.Errorf("Transverses.HealthCheck returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "HealthCheck", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "HealthCheck", client, func() error {
 		_, err := client.Transverses.HealthCheck(ctx)
 		return err
 	})
@@ -72,7 +72,7 @@ func TestTransversesService_RecupererDevises_FR(t *testing.T) {
 		t.Errorf("Transverses.RecupererDevises returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererDevises", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererDevises", client, func() error {
 		_, err := client.Transverses.RecupererDevises(ctx, "")
 		return err
 	})
@@ -116,7 +116,7 @@ func TestTransversesService_RecupererDevises_EN(t *testing.T) {
 		t.Errorf("Transverses.RecupererDevises returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererDevises", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererDevises", client, func() error {
 		_, err := client.Transverses.RecupererDevises(ctx, "")
 		return err
 	})
@@ -152,7 +152,7 @@ func TestTransversesService_TelechargerAnnuaireDestinataire(t *testing.T) {
 		t.Errorf("Transverses.TelechargerAnnuaireDestinataire returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "TelechargerAnnuaireDestinataire", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "TelechargerAnnuaireDestinataire", client, func() error {
 		_, err := client.Transverses.TelechargerAnnuaireDestinataire(ctx)
 		return err
 	})
@@ -199,7 +199,7 @@ func TestTransversesService_RecupererModesDepot(t *testing.T) {
 		t.Errorf("Transverses.RecupererModesDepot returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererModesDepot", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererModesDepot", client, func() error {
 		_, err := client.Transverses.RecupererModesDepot(ctx)
 		return err
 	})
@@ -250,7 +250,7 @@ func TestTransversesService_RecupererPays_FR(t *testing.T) {
 		t.Errorf("Transverses.RecupererPays returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererPays", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererPays", client, func() error {
 		_, err := client.Transverses.RecupererPays(ctx, "")
 		return err
 	})
@@ -301,7 +301,7 @@ func TestTransversesService_RecupererPays_EN(t *testing.T) {
 		t.Errorf("Transverses.RecupererPays returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererPays", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererPays", client, func() error {
 		_, err := client.Transverses.RecupererPays(ctx, "")
 		return err
 	})
@@ -358,7 +358,7 @@ func TestTransversesService_RecupererMotifsRefusFactureAValider(t *testing.T) {
 		t.Errorf("Transverses.RecupererMotifsRefusFactureAValider returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererMotifsRefusFactureAValider", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererMotifsRefusFactureAValider", client, func() error {
 		_, err := client.Transverses.RecupererMotifsRefusFactureAValider(ctx, opt)
 		return err
 	})
@@ -418,7 +418,7 @@ func TestTransversesService_RecupererModesReglement(t *testing.T) {
 		t.Errorf("Transverses.RecupererModesReglement returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererModesReglement", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererModesReglement", client, func() error {
 		_, err := client.Transverses.RecupererModesReglement(ctx)
 		return err
 	})
@@ -466,7 +466,7 @@ func TestTransversesService_RecupererCadresFacturation(t *testing.T) {
 		t.Errorf("Transverses.RecupererCadresFacturation returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererCadresFacturation", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererCadresFacturation", client, func() error {
 		_, err := client.Transverses.RecupererCadresFacturation(ctx, "")
 		return err
 	})
@@ -519,7 +519,7 @@ func TestTransversesService_RecupererCoordonneesBancairesValides(t *testing.T) {
 		t.Errorf("Transverses.RecupererCoordonneesBancairesValides returned %+v, want %+v", got, want)
 	}
 
-	testDoRequestFailure(t, "RecupererCoordonneesBancairesValides", client, func() error {
+	testNewRequestAndDoRequestFailure(t, "RecupererCoordonneesBancairesValides", client, func() error {
 		_, err := client.Transverses.RecupererCoordonneesBancairesValides(ctx, opt)
 		return err
 	})

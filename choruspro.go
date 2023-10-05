@@ -109,17 +109,6 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 		return nil, err
 	}
 
-	// Check if token is valid, if not, get a new one
-	if !c.token.Valid() {
-		token, err := getOAuthToken(c.clientId, c.clientSecret, c.AuthUrl)
-		if err != nil {
-			return nil, err
-		}
-
-		// Update token
-		c.token = token
-	}
-
 	data, err := json.Marshal(body)
 
 	// Temp
@@ -134,7 +123,6 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.token.AccessToken))
 	req.Header.Add("Content-Type", "application/json;charset=utf-8")
 	req.Header.Add("cpro-account", c.login)
 
@@ -142,6 +130,19 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 }
 
 func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface{}) error {
+	// Check if token is valid, if not, get a new one
+	if !c.token.Valid() {
+		token, err := getOAuthToken(c.clientId, c.clientSecret, c.AuthUrl)
+		if err != nil {
+			return err
+		}
+
+		// Update token
+		c.token = token
+
+		req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", c.token.AccessToken))
+	}
+
 	res, err := c.client.Do(req)
 	if err != nil {
 		return err

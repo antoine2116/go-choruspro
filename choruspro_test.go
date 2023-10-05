@@ -26,10 +26,10 @@ func setup() (client *Client, mux *http.ServeMux, teardown func()) {
 	return client, mux, server.Close
 }
 
-// Test function under s.client.DoRequest failure.
+// Test function under s.client.NewRequest or s.client.DoRequest failure.
 // Method f should be a regular call that would normally succeed, but
 // should return an error when NewRequest or s.client.DoRequest fails.
-func testDoRequestFailure(t *testing.T, methodName string, client *Client, f func() error) {
+func testNewRequestAndDoRequestFailure(t *testing.T, methodName string, client *Client, f func() error) {
 	t.Helper()
 	if methodName == "" {
 		t.Error("testNewRequestAndDoFailure : method name should be provided")
@@ -40,6 +40,13 @@ func testDoRequestFailure(t *testing.T, methodName string, client *Client, f fun
 
 	if err == nil {
 		t.Errorf("client.BaseURL.Path='' %v err = nil, want error", methodName)
+	}
+
+	client.BaseUrl.Path = "/v1/"
+	err = f()
+
+	if err == nil {
+		t.Errorf("client.AuthURL.Path='' %v err = nil, want error", methodName)
 	}
 }
 
