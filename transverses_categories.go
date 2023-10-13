@@ -37,13 +37,15 @@ func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Conte
 }
 
 type ListeSousCategoriesSollicitation struct {
-	CodeRetour     int32  `json:"codeRetour"`
-	Libelle        string `json:"libelle"`
-	SousCategories []struct {
-		Categories     []CategorieSollicitation     `json:"categorie"`
-		SousCategories []SousCategorieSollicitation `json:"ssCategorie"`
-	} `json:"listeSousCategories"`
-	Pagination *PaginationResponse `json:"parametresRetour"`
+	CodeRetour     int32                        `json:"codeRetour"`
+	Libelle        string                       `json:"libelle"`
+	SousCategories []SousCategoriesSolliciation `json:"listeSousCategories"`
+	Pagination     *PaginationResponse          `json:"parametresRetour"`
+}
+
+type SousCategoriesSolliciation struct {
+	Categories     []CategorieSollicitation     `json:"categorie"`
+	SousCategories []SousCategorieSollicitation `json:"ssCategorie"`
 }
 
 type CategorieSollicitation struct {

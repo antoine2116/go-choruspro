@@ -50,13 +50,13 @@ type CompteRendu struct {
 	NumeroFluxDepot          string     `json:"numeroFluxDepot,omitempty"`
 }
 
-type CompteRenduOptions struct {
+type ConsulterCompteRenduOptions struct {
 	DateDepot       *time.Time  `json:"dateDepot,omitempty"`
 	NumeroFluxDepot string      `json:"numeroFluxDepot"`
 	SyntaxeFlux     SyntaxeFlux `json:"syntaxeFlux,omitempty"`
 }
 
-func (o CompteRenduOptions) Validate() error {
+func (o ConsulterCompteRenduOptions) Validate() error {
 	if o.NumeroFluxDepot == "" {
 		return errors.New("choruspro: NumeroFluxDepot is required")
 	}
@@ -64,7 +64,7 @@ func (o CompteRenduOptions) Validate() error {
 	return nil
 }
 
-func (s *TransversesService) ConsulterCompteRendu(ctx context.Context, opts CompteRenduOptions) (*CompteRendu, error) {
+func (s *TransversesService) ConsulterCompteRendu(ctx context.Context, opts ConsulterCompteRenduOptions) (*CompteRendu, error) {
 	err := opts.Validate()
 	if err != nil {
 		return nil, err
@@ -97,12 +97,12 @@ type CompteRenduDetaille struct {
 	ErreursTechniques        []ErreurTechnique       `json:"listeErreurTechnique,omitempty"`
 }
 
-type CompteRenduDetailleOptions struct {
+type ConsulterCompteRenduDetailleOptions struct {
 	NumeroFluxDepot string      `json:"numeroFluxDepot"`
 	SyntaxeFlux     SyntaxeFlux `json:"syntaxeFlux,omitempty"`
 }
 
-func (o CompteRenduDetailleOptions) Validate() error {
+func (o ConsulterCompteRenduDetailleOptions) Validate() error {
 	if o.NumeroFluxDepot == "" {
 		return fmt.Errorf("choruspro: NumeroFluxDepot is required")
 	}
@@ -110,7 +110,7 @@ func (o CompteRenduDetailleOptions) Validate() error {
 	return nil
 }
 
-func (s *TransversesService) ConsulterCompteRenduDetaille(ctx context.Context, opts CompteRenduDetailleOptions) (*CompteRenduDetaille, error) {
+func (s *TransversesService) ConsulterCompteRenduDetaille(ctx context.Context, opts ConsulterCompteRenduDetailleOptions) (*CompteRenduDetaille, error) {
 	err := opts.Validate()
 	if err != nil {
 		return nil, err

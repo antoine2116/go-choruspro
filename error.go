@@ -47,7 +47,7 @@ type ErreurDemandePaiement struct {
 }
 
 type ErreurTechnique struct {
-	CodeErreur    string `json:"codeErreurn,omitempty"`
+	CodeErreur    string `json:"codeErreur,omitempty"`
 	LibelleErreur string `json:"libelleErreur,omitempty"`
 	NatureErreur  string `json:"natureErreur,omitempty"`
 }
