@@ -32,7 +32,7 @@ type ObjectPJ string
 const (
 	ObjetPJDemandePaiement             ObjectPJ = "DEMANDE_PAIEMENT"
 	ObjetPJEngagementJuridique         ObjectPJ = "ENGAGEMENT_JURIDIQUE"
-	ObjetPJSolicitation                ObjectPJ = "SOLLICITATION"
+	ObjetPJSollicitation               ObjectPJ = "SOLLICITATION"
 	ObjetPJStructurePieceJointe        ObjectPJ = "STRUCTURE_PIECEJOINTE"
 	ObjetPJStructureMandat             ObjectPJ = "STRUCTURE_MANDAT"
 	ObjetPJStructureCoordonneeBancaire ObjectPJ = "STRUCTURE_COORDONNEE_BANCAIRE"
@@ -76,7 +76,7 @@ func (s *TransversesService) RecupererTypesPieceJointe(ctx context.Context, opts
 type AjouterPieceResponse struct {
 	CodeRetour    int32  `json:"codeRetour"`
 	Libelle       string `json:"libelle"`
-	PieceJointeId int64  `json:"pieceJointeId"`
+	IdPieceJointe int64  `json:"pieceJointeId"`
 }
 
 type AjouterPieceOptions struct {
@@ -108,6 +108,11 @@ func (o AjouterPieceOptions) Validate() error {
 }
 
 func (s *TransversesService) AjouterPieceJointe(ctx context.Context, opts AjouterPieceOptions) (*AjouterPieceResponse, error) {
+	err := opts.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/ajouter/fichier", opts)
 	if err != nil {
 		return nil, err
@@ -127,20 +132,20 @@ type ListePiecesJointesStructure struct {
 	CodeRetour    int32                  `json:"codeRetour"`
 	Libelle       string                 `json:"libelle"`
 	PiecesJointes []PieceJointeStructure `json:"listePiecesJointes,omitempty"`
-	Pagiantion    *PaginationResponse    `json:"parametresRetour,omitempty"`
+	Pagination    *PaginationResponse    `json:"parametresRetour,omitempty"`
 }
 
 type PieceJointeStructure struct {
-	Designation     string `json:"pieceJointeDesignation"`
-	Extension       string `json:"pieceJointeExtension"`
-	Id              int64  `json:"pieceJointeId"`
-	ObjetId         int64  `json:"pieceJointeObjetId"`
-	StructureCode   string `json:"pieceJointeStructureCode"`
-	StructureId     int64  `json:"pieceJointeStructureId"`
-	StructureRaison string `json:"pieceJointeStructureRaisonSociale"`
-	TypeCode        string `json:"pieceJointeTypeCode"`
-	TypeLibelle     string `json:"pieceJointeTypeLibelle"`
-	IdUtitilisateur int64  `json:"pieceJointeUtilisateurId"`
+	Designation            string `json:"pieceJointeDesignation"`
+	Extension              string `json:"pieceJointeExtension"`
+	Id                     int64  `json:"pieceJointeId"`
+	ObjetId                int64  `json:"pieceJointeObjetId"`
+	StructureCode          string `json:"pieceJointeStructureCode"`
+	StructureId            int64  `json:"pieceJointeStructureId"`
+	StructureRaisonSociale string `json:"pieceJointeStructureRaisonSociale"`
+	TypeCode               string `json:"pieceJointeTypeCode"`
+	TypeLibelle            string `json:"pieceJointeTypeLibelle"`
+	IdUtilisateur          int64  `json:"pieceJointeUtilisateurId"`
 }
 
 type ListePiecesJointesStructureOptions struct {
@@ -184,7 +189,7 @@ type ListePiecesJointesMonCompte struct {
 	CodeRetour    int32                  `json:"codeRetour"`
 	Libelle       string                 `json:"libelle"`
 	PiecesJointes []PieceJointeMonCompte `json:"listePiecesJointes,omitempty"`
-	Pagiantion    *PaginationResponse    `json:"parametresRetour,omitempty"`
+	Pagination    *PaginationResponse    `json:"parametresRetour,omitempty"`
 }
 
 type PieceJointeMonCompte struct {
@@ -233,36 +238,42 @@ func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Contex
 	return pieces, nil
 }
 
+type TelechargerPieceJointeDemandePaiementOptions struct {
+	// 2 values possible : "OUI" or "NON"
+	AvecPJCompltementaires string `json:"avecPiecesJointesComplementaires"`
+
+	// 2 values possible : "PDF" or "PIVOT"
+	Format       string           `json:"format"`
+	ListeFacture []ListeIdFacture `json:"listeFacture"`
+}
+
+type ListeIdFacture struct {
+	IdFacture int64 `json:"idFacture"`
+}
+
+type TelechargerPieceJointeSollicitationOptions struct {
+	Id int64 `json:"idSollicitation"`
+
+	// 2 values possible : "OUI" or "NON"
+	PieceJointeSollicitation string `json:"pieceJointeSollicitation"`
+}
+
+type TelechargerPieceJointeEngagementJuridiqueOptions struct {
+	Numero string `json:"numeroEngagementJuridique"`
+}
+
+type TelechargerPieceJointeStructureOptions struct {
+	Id              int64  `json:"idStructure"`
+	Identifiant     string `json:"identifiantStructure"`
+	TypeIdentifiant string `json:"typeIdentifiantStructure"`
+}
+
 type TelechargerPieceJointeOptions struct {
-	Objet ObjectPJ `json:"objetPieceJointe"`
-
-	DemandePaiement *struct {
-		// 2 values possible : "OUI" or "NON"
-		AvecPJCompltementaires string `json:"avecPiecesJointesComplementaires"`
-
-		// 2 values possible : "PDF" or "PIVOT"
-		Format       string `json:"format"`
-		ListeFacture []struct {
-			IdFacture int64 `json:"idFacture"`
-		} `json:"listeFacture"`
-	} `json:"demandePaiement"`
-
-	EngagementJuridique *struct {
-		Numero string `json:"numeroEngagementJuridique"`
-	} `json:"engagementJuridique"`
-
-	Sollicitation *struct {
-		Id int64 `json:"idSollicitation"`
-
-		// 2 values possible : "OUI" or "NON"
-		PieceJointeSollicitation string `json:"pieceJointeSollicitation"`
-	} `json:"sollicitation"`
-
-	Structure *struct {
-		Id              int64  `json:"idStructure"`
-		Identifiant     string `json:"identifiantStructure"`
-		TypeIdentifiant string `json:"typeIdentifiantStructure"`
-	} `json:"structure"`
+	Objet               ObjectPJ                                          `json:"objetPieceJointe"`
+	DemandePaiement     *TelechargerPieceJointeDemandePaiementOptions     `json:"demandePaiement,omitempty"`
+	EngagementJuridique *TelechargerPieceJointeEngagementJuridiqueOptions `json:"engagementJuridique,omitempty"`
+	Sollicitation       *TelechargerPieceJointeSollicitationOptions       `json:"sollicitation,omitempty"`
+	Structure           *TelechargerPieceJointeStructureOptions           `json:"structure,omitempty"`
 }
 
 type PieceJointe struct {
@@ -291,19 +302,17 @@ func (o TelechargerPieceJointeOptions) Validate() error {
 		if len(o.DemandePaiement.ListeFacture) == 0 {
 			return errors.New("choruspro: DemandePaiement.ListeFacture must contain at least one element")
 		}
-	}
-
-	// Engagement juridique validation
-	if o.Objet == ObjetPJEngagementJuridique {
+	} else if o.Objet == ObjetPJEngagementJuridique {
 		if o.EngagementJuridique == nil {
 			return fmt.Errorf("choruspro: EngagementJuridique is required because ObjetPieceJointe is set to %s", ObjetPJEngagementJuridique)
 		}
-	}
 
-	// Sollicitation validation
-	if o.Objet == ObjetPJSolicitation {
+		if o.EngagementJuridique.Numero == "" {
+			return errors.New("choruspro: EngagementJuridique.NumeroEngagementJuridique is required")
+		}
+	} else if o.Objet == ObjetPJSollicitation {
 		if o.Sollicitation == nil {
-			return fmt.Errorf("choruspro: Sollicitation is required because ObjetPieceJointe is set to %s", ObjetPJSolicitation)
+			return fmt.Errorf("choruspro: Sollicitation is required because ObjetPieceJointe is set to %s", ObjetPJSollicitation)
 		}
 
 		if o.Sollicitation.Id == 0 {
@@ -313,10 +322,7 @@ func (o TelechargerPieceJointeOptions) Validate() error {
 		if o.Sollicitation.PieceJointeSollicitation != "OUI" && o.Sollicitation.PieceJointeSollicitation != "NON" {
 			return errors.New("choruspro: Sollicitation.PieceJointeSollicitation must be set to OUI or NON")
 		}
-	}
-
-	// Structure validation
-	if o.Objet == ObjetPJStructurePieceJointe ||
+	} else if o.Objet == ObjetPJStructurePieceJointe ||
 		o.Objet == ObjetPJStructureMandat ||
 		o.Objet == ObjetPJStructureCoordonneeBancaire {
 		if o.Structure == nil {
@@ -338,6 +344,8 @@ func (o TelechargerPieceJointeOptions) Validate() error {
 		if o.Structure.Identifiant == "" && o.Structure.TypeIdentifiant != "" {
 			return errors.New("choruspro: Structure.IdentifiantStructure is required when Structure.TypeIdentifiantStructure is set")
 		}
+	} else {
+		return fmt.Errorf("choruspro: ObjetPieceJointe %s is not supported", o.Objet)
 	}
 
 	return nil

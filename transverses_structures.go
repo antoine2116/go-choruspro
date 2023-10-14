@@ -14,7 +14,7 @@ type ListeStrcturesActives struct {
 
 type StructureActive struct {
 	Designation string `json:"designationStructure"`
-	IdCPP       int64  `json:"idStrctureCPP"`
+	IdCPP       int64  `json:"idStructureCPP"`
 	Identifiant string `json:"identifiant"`
 }
 
@@ -111,14 +111,23 @@ type InformationsSIRET struct {
 	SiretPredecesseurSuccesseur   string `json:"siretPredecesseurSuccesseur,omitempty"`
 }
 
-func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, siret string) (*InformationsSIRET, error) {
-	if siret == "" {
-		return nil, errors.New("siret is required")
+type ConsulterInformationsSIRETOptions struct {
+	Siret string `json:"siretStructure"`
+}
+
+func (o *ConsulterInformationsSIRETOptions) Validate() error {
+	if o.Siret == "" {
+		return errors.New("siretStructure is required")
 	}
 
-	opts := &struct {
-		SiretStrucutre string `json:"siretStructure"`
-	}{SiretStrucutre: siret}
+	return nil
+}
+
+func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, opts ConsulterInformationsSIRETOptions) (*InformationsSIRET, error) {
+	err := opts.Validate()
+	if err != nil {
+		return nil, err
+	}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/consulter/information/siret", opts)
 	if err != nil {

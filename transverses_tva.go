@@ -8,7 +8,7 @@ import (
 type ListeTauxTva struct {
 	CodeRetour int32     `json:"codeRetour"`
 	Libelle    string    `json:"libelle"`
-	TauxTva    []TauxTva `json:"listeTauxTva"`
+	Taux       []TauxTva `json:"listeTauxTva"`
 }
 
 type TauxTva struct {

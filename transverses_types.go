@@ -34,13 +34,13 @@ func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) 
 }
 
 type ListeTypesFactureTravaux struct {
-	CodeRetour          int32                `json:"codeRetour"`
-	Libelle             string               `json:"libelle"`
-	TypesFactureTravaux []TypeFactureTravaux `json:"listeTypeFactureTravaux"`
+	CodeRetour int32                `json:"codeRetour"`
+	Libelle    string               `json:"libelle"`
+	Types      []TypeFactureTravaux `json:"listeTypeFactureTravaux"`
 }
 
 type TypeFactureTravaux struct {
-	TypeFactureTravaux string `json:"typeFactureTravaux"`
+	Type string `json:"typeFactureTravaux"`
 }
 
 func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (*ListeTypesFactureTravaux, error) {
