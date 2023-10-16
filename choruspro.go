@@ -6,13 +6,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
 	"golang.org/x/oauth2"
+)
+
+const (
+	defaultBaseURL = "https://sandbox-api.piste.gouv.fr/"
+	defaultAuthURL = "https://sandbox-oauth.piste.gouv.fr/"
 )
 
 // ClientConfig contains the configuration for the client
@@ -96,6 +100,8 @@ func (c *Client) WithConfig(config *ClientConfig) (*Client, error) {
 
 func (c *Client) initialize() {
 	c.common.client = c
+	c.BaseUrl, _ = url.Parse(defaultBaseURL)
+	c.AuthUrl, _ = url.Parse(defaultAuthURL)
 	c.Transverses = (*TransversesService)(&c.common)
 }
 
@@ -110,10 +116,6 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 	}
 
 	data, err := json.Marshal(body)
-
-	// Temp
-	log.Printf("Request body : \n%s", string(data))
-
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +161,6 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 	}
 
 	data, err := io.ReadAll(res.Body)
-	log.Printf("Response body : \n%s", string(data))
 	if err != nil {
 		return nil
 	}
@@ -168,11 +169,7 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 }
 
 func getOAuthToken(clientId, clientSecret string, authUrl *url.URL) (*oauth2.Token, error) {
-	u, err := authUrl.Parse("api/oauth/token")
-	if err != nil {
-		return nil, err
-	}
-
+	u, _ := authUrl.Parse("api/oauth/token")
 	c := http.DefaultClient
 
 	data := url.Values{}
