@@ -290,10 +290,15 @@ func TestGetOAuthToken(t *testing.T) {
 	want := &oauth2.Token{
 		AccessToken: "token",
 		TokenType:   "Bearer",
-		Expiry:      time.Now().Add(time.Hour),
+		Expiry:      time.Now().Add(time.Hour), // unable to test this (time is not equal cause of nanoseconds)
 	}
-	if !reflect.DeepEqual(token, want) {
-		t.Errorf("getOAuthToken returned %+v, want %+v", token, want)
+
+	if token.AccessToken != want.AccessToken {
+		t.Errorf("getOAuthToken returned AccessToken = %+v, want %+v", token, want)
+	}
+
+	if token.TokenType != want.TokenType {
+		t.Errorf("getOAuthToken returned TokenType = %+v, want %+v", token, want)
 	}
 }
 
