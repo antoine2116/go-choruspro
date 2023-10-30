@@ -240,14 +240,12 @@ func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Contex
 
 type TelechargerPieceJointeDemandePaiementOptions struct {
 	// 2 values possible : "OUI" or "NON"
-	AvecPJCompltementaires string `json:"avecPiecesJointesComplementaires"`
-
-	// 2 values possible : "PDF" or "PIVOT"
-	Format       string           `json:"format"`
-	ListeFacture []ListeIdFacture `json:"listeFacture"`
+	AvecPJCompltementaires string        `json:"avecPiecesJointesComplementaires"`
+	Format                 FormatFichier `json:"format"`
+	ListeFacture           []IdFacture   `json:"listeFacture"`
 }
 
-type ListeIdFacture struct {
+type IdFacture struct {
 	IdFacture int64 `json:"idFacture"`
 }
 

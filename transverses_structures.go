@@ -145,13 +145,13 @@ func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, opt
 }
 
 type ListeDestinataires struct {
-	CodeRetour    int32              `json:"codeRetour"`
-	Libelle       string             `json:"libelle"`
-	Destinataires []Destinataire     `json:"listeDestinataires"`
-	Pagination    PaginationResponse `json:"parametresRetour"`
+	CodeRetour    int32                   `json:"codeRetour"`
+	Libelle       string                  `json:"libelle"`
+	Destinataires []DestinataireRecherche `json:"listeDestinataires"`
+	Pagination    PaginationResponse      `json:"parametresRetour"`
 }
 
-type Destinataire struct {
+type DestinataireRecherche struct {
 	IdStructureCPP    int64  `json:"idStructureCPP"`
 	Siret             string `json:"siret"`
 	Nom               string `json:"nomDestinataire,omitempty"`

@@ -359,7 +359,7 @@ func TestTransversesService_RechercherDestinataires(t *testing.T) {
 	want := &ListeDestinataires{
 		CodeRetour: 0,
 		Libelle:    "l",
-		Destinataires: []Destinataire{
+		Destinataires: []DestinataireRecherche{
 			{
 				IdStructureCPP:    1,
 				Siret:             "s",

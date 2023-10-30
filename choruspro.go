@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -66,6 +67,7 @@ type Client struct {
 
 	// Services
 	Transverses *TransversesService
+	Factures    *FacturesService
 }
 
 type service struct {
@@ -103,6 +105,7 @@ func (c *Client) initialize() {
 	c.BaseUrl, _ = url.Parse(defaultBaseURL)
 	c.AuthUrl, _ = url.Parse(defaultAuthURL)
 	c.Transverses = (*TransversesService)(&c.common)
+	c.Factures = (*FacturesService)(&c.common)
 }
 
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
@@ -161,6 +164,8 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 	}
 
 	data, err := io.ReadAll(res.Body)
+	// Print
+	log.Println(string(data))
 	if err != nil {
 		return nil
 	}
@@ -215,3 +220,19 @@ func getOAuthToken(clientId, clientSecret string, authUrl *url.URL) (*oauth2.Tok
 
 	return tok, nil
 }
+
+// Bool is a helper routine that allocates a new bool value
+// to store v and returns a pointer to it.
+func Bool(v bool) *bool { return &v }
+
+// Int is a helper routine that allocates a new int value
+// to store v and returns a pointer to it.
+func Int(v int) *int { return &v }
+
+// Int64 is a helper routine that allocates a new int64 value
+// to store v and returns a pointer to it.
+func Int64(v int64) *int64 { return &v }
+
+// String is a helper routine that allocates a new string value
+// to store v and returns a pointer to it.
+func String(v string) *string { return &v }

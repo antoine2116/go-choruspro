@@ -27,3 +27,10 @@ const (
 	SyntaxeFluxE2CiiFacturx    SyntaxeFlux = "IN_DP_E2_CII_FACTURX"
 	SyntaxeFluxE3UblInvoice    SyntaxeFlux = "IN_DP_E3_UBL_INVOICE"
 )
+
+type FormatFichier string
+
+const (
+	FormatFichierPdf   FormatFichier = "PDF"
+	FormatFichierPivot FormatFichier = "PIVOT"
+)

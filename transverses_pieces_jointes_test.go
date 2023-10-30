@@ -425,7 +425,7 @@ func TestTransversesService_TelechargerPieceJointe_MissingOption(t *testing.T) {
 				DemandePaiement: &TelechargerPieceJointeDemandePaiementOptions{
 					AvecPJCompltementaires: "OUI",
 					Format:                 "PDF",
-					ListeFacture:           []ListeIdFacture{},
+					ListeFacture:           []IdFacture{},
 				},
 			},
 		},

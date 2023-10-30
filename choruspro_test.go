@@ -18,6 +18,12 @@ const (
 	baseAuthPath = "/api/oauth/token"
 )
 
+var (
+	defaultDate        = time.Date(2023, 01, 01, 0, 0, 0, 0, time.UTC)
+	defaultDateStr     = `"2023-01-01"`
+	defaultDateTimeStr = `"2023-01-01T00:00:00Z"`
+)
+
 func setup() (client *Client, mux *http.ServeMux, teardown func()) {
 	client, mux, teardown = bareSetup()
 
