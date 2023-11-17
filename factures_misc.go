@@ -35,3 +35,33 @@ func (s *FacturesService) TelechargerGroupe(ctx context.Context, opts TraiterFac
 
 	return res, nil
 }
+
+type RecupererStatutsVisiblesParValideurOptions struct {
+	IdUtilisateurCourant int64 `json:"idUtilisateurCourant"`
+}
+
+type StatutVisible struct {
+	CodeStatut string `json:"codeStatutFacture"`
+}
+
+type RecupererStatutsVisiblesParValideurResponse struct {
+	CodeRetour         int64           `json:"codeRetour"`
+	Libelle            string          `json:"libelle"`
+	ListeStatutFacture []StatutVisible `json:"listeStatutFacture"`
+}
+
+func (s *FacturesService) RecupererStatutsVisiblesParValideur(ctx context.Context, opts RecupererStatutsVisiblesParValideurOptions) (*RecupererStatutsVisiblesParValideurResponse, error) {
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/recuperer/statutsFactureVisibles/valideur", opts)
+	if err != nil {
+		return nil, err
+	}
+
+	res := new(RecupererStatutsVisiblesParValideurResponse)
+
+	err = s.client.doRequest(ctx, req, res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

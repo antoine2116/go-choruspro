@@ -19,9 +19,10 @@ const (
 )
 
 var (
-	defaultDate        = time.Date(2023, 01, 01, 0, 0, 0, 0, time.UTC)
-	defaultDateStr     = `"2023-01-01"`
-	defaultDateTimeStr = `"2023-01-01T00:00:00Z"`
+	defaultDate           = time.Date(2023, 01, 01, 0, 0, 0, 0, time.UTC)
+	defaultDateStr        = `"2023-01-01"`
+	defaultISODateTimeStr = `"2023-01-01T00:00:00Z"`
+	defaultDateTimeStr    = `"2023-01-01 00:00"`
 )
 
 func setup() (client *Client, mux *http.ServeMux, teardown func()) {

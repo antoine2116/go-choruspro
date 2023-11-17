@@ -8,6 +8,94 @@ import (
 	"testing"
 )
 
+func TestFacturesService_CompleterFacture(t *testing.T) {
+	client, mux, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/cpro/factures/v1/completer", func(w http.ResponseWriter, r *http.Request) {
+		v := new(CompleterFactureOptions)
+		assertNilError(t, json.NewDecoder(r.Body).Decode(v))
+		testMethod(t, r, http.MethodPost)
+		w.Write([]byte(`{
+			"codeRetour": 1,
+			"dateTraitement": ` + defaultDateStr + `,
+			"identifiantFactureCPP": 1,
+			"libelle": "l",
+			"numeroFacture": "n"
+		}`))
+	})
+
+	ctx := context.Background()
+	opt := CompleterFactureOptions{}
+	got, err := client.Factures.CompleterFacture(ctx, opt)
+
+	if err != nil {
+		t.Errorf("Factures.CompleterFacture returned error : %v", err)
+	}
+
+	want := &CompleterFactureResponse{
+		CodeRetour:            1,
+		DateTraitement:        &Date{defaultDate},
+		IdentifiantFactureCPP: 1,
+		Libelle:               "l",
+		NumeroFacture:         "n",
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Factures.CompleterFacture returned %+v, want %+v", got, want)
+	}
+
+	testNewRequestAndDoRequestFailure(t, "CompleterFacture", client, func() error {
+		_, err := client.Factures.CompleterFacture(ctx, opt)
+		return err
+	})
+}
+
+func TestFacturesService_RecyclerFacture(t *testing.T) {
+	client, mux, teardown := setup()
+	defer teardown()
+
+	mux.HandleFunc("/cpro/factures/v1/recycler", func(w http.ResponseWriter, r *http.Request) {
+		v := new(RecyclerFactureOptions)
+		assertNilError(t, json.NewDecoder(r.Body).Decode(v))
+		testMethod(t, r, http.MethodPost)
+		w.Write([]byte(`{
+			"codeRetour": 1,
+			"dateDepot": ` + defaultDateStr + `,
+			"identifiantFactureCPP": 1,
+			"libelle": "l",
+			"numeroFacture": "n",
+			"statutFacture": "s"
+		}`))
+	})
+
+	ctx := context.Background()
+	opt := RecyclerFactureOptions{}
+	got, err := client.Factures.RecyclerFacture(ctx, opt)
+
+	if err != nil {
+		t.Errorf("Factures.RecyclerFacture returned error : %v", err)
+	}
+
+	want := &RecyclerFactureResponse{
+		CodeRetour:            1,
+		DateDepot:             &Date{defaultDate},
+		IdentifiantFactureCPP: 1,
+		Libelle:               "l",
+		NumeroFacture:         "n",
+		StatutFacture:         "s",
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Factures.RecyclerFacture returned %+v, want %+v", got, want)
+	}
+
+	testNewRequestAndDoRequestFailure(t, "RecyclerFacture", client, func() error {
+		_, err := client.Factures.RecyclerFacture(ctx, opt)
+		return err
+	})
+}
+
 func TestFacturesService_SoumettreFacture(t *testing.T) {
 	client, mux, teardown := setup()
 	defer teardown()
@@ -104,45 +192,41 @@ func TestFacturesService_DeposerFlux(t *testing.T) {
 	})
 }
 
-func TestFacturesService_CompleterFacture(t *testing.T) {
+func TestFacturesService_CorrigerValideurFacture(t *testing.T) {
 	client, mux, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/cpro/factures/v1/completer", func(w http.ResponseWriter, r *http.Request) {
-		v := new(CompleterFactureOptions)
+	mux.HandleFunc("/cpro/factures/v1/corriger/valideur/facture", func(w http.ResponseWriter, r *http.Request) {
+		v := new(CorrigerValideurFactureOptions)
 		assertNilError(t, json.NewDecoder(r.Body).Decode(v))
 		testMethod(t, r, http.MethodPost)
 		w.Write([]byte(`{
 			"codeRetour": 1,
-			"dateTraitement": ` + defaultDateStr + `,
-			"identifiantFactureCPP": 1,
-			"libelle": "l",
-			"numeroFacture": "n"
+			"idFacture": 1,
+			"libelle": "l"
 		}`))
 	})
 
 	ctx := context.Background()
-	opt := CompleterFactureOptions{}
-	got, err := client.Factures.CompleterFacture(ctx, opt)
+	opt := CorrigerValideurFactureOptions{}
+	got, err := client.Factures.CorrigerValideurFacture(ctx, opt)
 
 	if err != nil {
-		t.Errorf("Factures.CompleterFacture returned error : %v", err)
+		t.Errorf("Factures.CorrigerValideurFacture returned error : %v", err)
 	}
 
-	want := &CompleterFactureResponse{
-		CodeRetour:            1,
-		DateTraitement:        &Date{defaultDate},
-		IdentifiantFactureCPP: 1,
-		Libelle:               "l",
-		NumeroFacture:         "n",
+	want := &CorrigerValideurFactureResponse{
+		CodeRetour: 1,
+		IdFacture:  1,
+		Libelle:    "l",
 	}
 
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Factures.CompleterFacture returned %+v, want %+v", got, want)
+		t.Errorf("Factures.CorrigerValideurFacture returned %+v, want %+v", got, want)
 	}
 
-	testNewRequestAndDoRequestFailure(t, "CompleterFacture", client, func() error {
-		_, err := client.Factures.CompleterFacture(ctx, opt)
+	testNewRequestAndDoRequestFailure(t, "CorrigerValideurFacture", client, func() error {
+		_, err := client.Factures.CorrigerValideurFacture(ctx, opt)
 		return err
 	})
 }

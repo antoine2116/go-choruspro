@@ -62,3 +62,24 @@ const (
 	TypeFactureAvoir   TypeFacture = "AVOIR"
 	TypeFactureAcompte TypeFacture = "ACOMPTE"
 )
+
+type TypeTva string
+
+const (
+	TypeTvaSurDebit        TypeTva = "TVA_SUR_DEBIT"
+	TypeTvaSurEncaissement TypeTva = "TVA_SUR_ENCAISSEMENT"
+	TypeTvaExoneration     TypeTva = "EXONERATION"
+	TypeTvaSansTva         TypeTva = "SANS_TVA"
+)
+
+type TypeIdentifiant string
+
+const (
+	TypeIdentifiantSiret        TypeIdentifiant = "SIRET"
+	TypeIdentifiantUEHorsFrance TypeIdentifiant = "UE_HORS_FRANCE"
+	TypeIdentifiantHorsUE       TypeIdentifiant = "HORS_UE"
+	TypeIdentifiantRidet        TypeIdentifiant = "RIDET"
+	TypeIdentifiantTahiti       TypeIdentifiant = "TAHITI"
+	TypeIdentifiantAutre        TypeIdentifiant = "AUTRE"
+	TypeIdentifiantParticulier  TypeIdentifiant = "PARTICULIER"
+)

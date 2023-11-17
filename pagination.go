@@ -41,3 +41,24 @@ type PaginationLignesRecapTVAOptions struct {
 	TriColonne           string  `json:"triColonneListeRecapitulatifTVA,omitempty"`
 	TriSens              TriSens `json:"triSensListeRecapitulatifTVA,omitempty"`
 }
+
+type PaginationHistoActionsUtilisateursOptions struct {
+	NbResultatsParPageListeHistoAction   int    `json:"nbResultatsParPageListeHistoAction"`
+	PageResultatDemandeeListeHistoAction int    `json:"pageResultatDemandeeListeHistoAction"`
+	TriColonneListeHistoAction           string `json:"triColonneListeHistoAction"`
+	TriSensListeHistoAction              string `json:"triSensListeHistoAction"`
+}
+
+type PaginationHistoEvenementsComplementairesOptions struct {
+	NbResultatsParPageListeHistoEvenement   int    `json:"nbResultatsParPageListeHistoEvenement"`
+	PageResultatDemandeeListeHistoEvenement int    `json:"pageResultatDemandeeListeHistoEvenement"`
+	TriColonneListeHistoEvenement           string `json:"triColonneListeHistoEvenement"`
+	TriSensListeHistoEvenement              string `json:"triSensListeHistoEvenement"`
+}
+
+type PaginationHistoStatutsOptions struct {
+	NbResultatsParPageListeHistoStatut   int    `json:"nbResultatsParPageListeHistoStatut"`
+	PageResultatDemandeeListeHistoStatut int    `json:"pageResultatDemandeeListeHistoStatut"`
+	TriColonneListeHistoStatut           string `json:"triColonneListeHistoStatut"`
+	TriSensListeHistoStatut              string `json:"triSensListeHistoStatut"`
+}
