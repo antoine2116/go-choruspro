@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+// ConsulterFactureOptions est la structure de données utilisée pour appeler
+// les méthodes ConsulterFactureParRecipiendaire et ConsulterFactureParValideur.
 type ConsulterFactureOptions struct {
 	CodeLangue              CodeLangue                       `json:"codeLangue,omitempty"`
 	IdUtilisateurCourant    int                              `json:"idUtilisateurCourant,omitempty"`
@@ -14,6 +16,9 @@ type ConsulterFactureOptions struct {
 	PaginationLignesTVA     *PaginationLignesRecapTVAOptions `json:"rechercheligneTvaRecap,omitempty"`
 }
 
+// CadreDeFacturation est la structure de données représentant le cadre de facturation
+// d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type CadreDeFacturation struct {
 	Code                     CadreFac        `json:"codeCadreFacturation,omitempty"`
 	CodeServiceMoa           string          `json:"codeServiceMoa,omitempty"`
@@ -51,6 +56,9 @@ type CadreDeFacturation struct {
 	TypeIdentifiantValideur2 TypeIdentifiant `json:"typeIdentifiantValideur2,omitempty"`
 }
 
+// Affactureur est la structure de données représentant l'affactureur d'une facture.
+// Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type Affactureur struct {
 	Code            string          `json:"affactureurCode,omitempty"`
 	CodePays        string          `json:"affactureurCodePays,omitempty"`
@@ -59,6 +67,9 @@ type Affactureur struct {
 	TypeIdentifiant TypeIdentifiant `json:"affactureurTypeIdentifiant,omitempty"`
 }
 
+// PieceJointeFacture est la structure de données représentant une pièce jointe
+// d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type PieceJointeFacture struct {
 	Designation        string `json:"pieceJointeDesignation,omitempty"`
 	Extension          string `json:"pieceJointeExtension,omitempty"`
@@ -69,6 +80,9 @@ type PieceJointeFacture struct {
 	TypeLibelle        string `json:"pieceJointeTypeLibelle,omitempty"`
 }
 
+// LignePoste est la structure de données représentant une ligne de poste
+// d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type LignePoste struct {
 	Denomination          string  `json:"lignePosteDenomination,omitempty"`
 	MontantHtApresRemise  float32 `json:"lignePosteMontantHtApresRemise,omitempty"`
@@ -85,6 +99,9 @@ type LignePoste struct {
 	UniteLibelle          string  `json:"lignePosteUniteLibelle,omitempty"`
 }
 
+// LigneTva est la structure de données représentant une ligne de TVA
+// d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type LigneTva struct {
 	MontantBaseHtParTaux float32 `json:"ligneTvaMontantBaseHtParTaux,omitempty"`
 	MontantTvaParTaux    float32 `json:"ligneTvaMontantTvaParTaux,omitempty"`
@@ -95,6 +112,9 @@ type LigneTva struct {
 	TauxRefValeur        float32 `json:"ligneTvaTauxRefValeur,omitempty"`
 }
 
+// MontantTotal est la structure de données représentant les montants totaux
+// d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type MontantTotal struct {
 	MontantAPayer                  float32 `json:"montantAPayer,omitempty"`
 	MontantHtTotal                 float32 `json:"montantHtTotal,omitempty"`
@@ -105,11 +125,17 @@ type MontantTotal struct {
 	MotifRemiseGlobaleTTC          string  `json:"motifRemiseGlobaleTTC,omitempty"`
 }
 
+// PieceJointePrincipale est la structure de données représentant la pièce jointe
+// principale d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type PieceJointePrincipale struct {
 	IdLiaison int `json:"idLiaisonPieceJointePrincipale,omitempty"`
 	Id        int `json:"idPieceJointePrincipale,omitempty"`
 }
 
+// PiecePrecedente est la structure de données représentant la pièce précédente
+// d'une facture. Elle est utilisée dans la réponse  des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type PiecePrecedente struct {
 	CadreFacturation          string `json:"cadreFacturationPiecePrecedente,omitempty"`
 	CodeServiceExecutant      string `json:"codeServiceExecutantPiecePrecedente,omitempty"`
@@ -122,11 +148,18 @@ type PiecePrecedente struct {
 	RaisonSocialeDestinataire string `json:"raisonSocialeDestinatairePiecePrecedente,omitempty"`
 }
 
+// PieceSuivante est la structure de données représentant la pièce suivante
+// d'une facture. Elle est utilisée dans la réponse des méthodes
+// ConsulterFactureParRecipiendaire, ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type PieceSuivante struct {
 	CadreFacturation string `json:"cadreFacturationPieceSuivante,omitempty"`
 	Id               int    `json:"idPieceSuivante,omitempty"`
 	Numero           string `json:"numeroPieceSuivante,omitempty"`
 }
+
+// References est la structure de données représentant les références
+// d'une facture. Elle est utilisée dans les réponses des méthodes
+// ConsulterFactureParRecipiendaire, ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 
 type References struct {
 	CodeDevise                 string      `json:"codeDeviseFacture,omitempty"`
@@ -148,6 +181,9 @@ type References struct {
 	TypeTva                    TypeTva     `json:"typeTva,omitempty"`
 }
 
+// Destinataire est la structure de données représentant le destinataire
+// d'une facture. Elle est utilisée dans la réponse des méthodes
+// ConsulterFactureParRecipiendaire, ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type Destinataire struct {
 	AdresseCodePays         string `json:"adresseDestinataireCodePays,omitempty"`
 	AdresseCodePostal       string `json:"adresseDestinataireCodePostal,omitempty"`
@@ -166,6 +202,9 @@ type Destinataire struct {
 	LibelleServiceExecutant string `json:"libelleServiceExecutant,omitempty"`
 }
 
+// Fournisseur est la structure de données représentant le fournisseur
+// d'une facture. Elle est utilisée dans les réponses des méthodes
+// ConsulterFactureParRecipiendaire, ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type Fournisseur struct {
 	AdresseCodePays              string          `json:"adresseFournisseurCodePays,omitempty"`
 	AdresseCodePostal            string          `json:"adresseFournisseurCodePostal,omitempty"`
@@ -196,6 +235,9 @@ type Fournisseur struct {
 	TypeIdentifiant              TypeIdentifiant `json:"typeIdentifiantFournisseur,omitempty"`
 }
 
+// ListeLignesDePoste est la structure de données représentant la liste des lignes de poste
+// d'une facture. Elle est utilisée dans les réponses des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type ListeLignesDePoste struct {
 	Lignes             []LignePoste `json:"lignePoste,omitempty"`
 	NbResultatsParPage int64        `json:"nbResultatsParPageLignesPoste,omitempty"`
@@ -204,6 +246,9 @@ type ListeLignesDePoste struct {
 	Total              int64        `json:"totalLignesPoste,omitempty"`
 }
 
+// ListePiecesJointesFacture est la structure de données représentant la liste des pièces jointes
+// d'une facture. Elle est utilisée dans la réponse des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type ListePiecesJointesFacture struct {
 	PiecesJointes      []PieceJointeFacture `json:"pieceJointe,omitempty"`
 	NbResultatsParPage int64                `json:"nbResultatsParPageListePiecesJointe,omitempty"`
@@ -212,6 +257,9 @@ type ListePiecesJointesFacture struct {
 	Total              int64                `json:"totalListePiecesJointe,omitempty"`
 }
 
+// ListeLignesRecapTVA est la structure de données représentant la liste des lignes de récapitulatif
+// de TVA d'une facture. Elle est utilisée dans les réponses des méthodes ConsulterFactureParRecipiendaire,
+// ConsulterFactureParValideur et ConsulterFactureParFournisseur.
 type ListeLignesRecapTVA struct {
 	Lignes             []LigneTva `json:"ligneTva,omitempty"`
 	NbResultatsParPage int64      `json:"nbResultatsParPageLignesRecapitulativesTVA,omitempty"`
@@ -220,6 +268,9 @@ type ListeLignesRecapTVA struct {
 	Total              int64      `json:"totalLignesRecapitulativesTVA,omitempty"`
 }
 
+// Facture est la structure de données représentant une facture. Elle est utilisée dans la réponse
+// des méthodes ConsulterFactureParRecipiendaire, ConsulterFactureParValideur et
+// ConsulterFactureParFournisseur.
 type Facture struct {
 	CadreDeFacturation    CadreDeFacturation         `json:"cadreDeFacturation,omitempty"`
 	Commentaire           string                     `json:"commentaire,omitempty"`
@@ -239,12 +290,16 @@ type Facture struct {
 	StatutFacture         string                     `json:"statutFacture,omitempty"`
 }
 
+// ConsulterFactureResponse est la structure de données représentant la réponse de la méthode
+// ConsulterFacture.
 type ConsulterFactureResponse struct {
 	CodeRetour int     `json:"codeRetour,omitempty"`
 	Facture    Facture `json:"facture,omitempty"`
 	Libelle    string  `json:"libelle,omitempty"`
 }
 
+// La méthode ConsulterFactureParRecipiendaire permet d'afficher les informations
+// d'une facture reçue.
 func (s *FacturesService) ConsulterFactureParRecipiendaire(ctx context.Context, opts ConsulterFactureOptions) (*ConsulterFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/consulter/recipiendaire", opts)
 	if err != nil {
@@ -261,6 +316,8 @@ func (s *FacturesService) ConsulterFactureParRecipiendaire(ctx context.Context, 
 	return res, nil
 }
 
+// La méthode ConsulterFactureParValideur permet à un valideur de récupérer les informations
+// d'une facture pour la consultation.
 func (s *FacturesService) ConsulterFactureParValideur(ctx context.Context, opts ConsulterFactureOptions) (*ConsulterFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/consulter/valideur", opts)
 	if err != nil {
@@ -277,6 +334,8 @@ func (s *FacturesService) ConsulterFactureParValideur(ctx context.Context, opts 
 	return res, nil
 }
 
+// ConsulterFactureFournisseurOptions est la structure de données représentant
+// les options de la  méthode ConsulterFactureParFournisseur.
 type ConsulterFactureFournisseurOptions struct {
 	CodeLangue              CodeLangue                       `json:"codeLangue,omitempty"`
 	IdUtilisateurCourant    int                              `json:"idUtilisateurCourant,omitempty"`
@@ -286,6 +345,8 @@ type ConsulterFactureFournisseurOptions struct {
 	PaginationLignesTVA     *PaginationLignesRecapTVAOptions `json:"pLigneRecapTva,omitempty"`
 }
 
+// La méthode ConsulterFactureParFournisseur permet d'afficher les informations
+// d'une facture précédemment émise.
 func (s *FacturesService) ConsulterFactureParFournisseur(ctx context.Context, opts ConsulterFactureFournisseurOptions) (*ConsulterFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/consulter/fournisseur", opts)
 	if err != nil {
@@ -302,7 +363,9 @@ func (s *FacturesService) ConsulterFactureParFournisseur(ctx context.Context, op
 	return res, nil
 }
 
-type ConsulterHistoriqueOptions struct {
+// ConsulterHistoriqueFactureOptions est la structure de données
+// représentant les options de la méthode ConsulterHistoriqueFacture.
+type ConsulterHistoriqueFactureOptions struct {
 	IdEspace                                 int64                                            `json:"idEspace"`
 	IdFacture                                int64                                            `json:"idFacture"`
 	IdUtilisateurCourant                     int64                                            `json:"idUtilisateurCourant"`
@@ -311,11 +374,15 @@ type ConsulterHistoriqueOptions struct {
 	PaginationHistoStatuts                   *PaginationHistoStatutsOptions                   `json:"paramRechercheHistoStatuts"`
 }
 
+// DerniereAction est la structure de données représentant la dernière action
+// effectuée sur une facture. Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type DerniereAction struct {
 	Code string `json:"derniereActionCode"`
 	Id   int64  `json:"derniereActionId"`
 }
 
+// HistoAction est la structure de données représentant une action effectuée sur une facture.
+// Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type HistoAction struct {
 	Code                 string    `json:"histoActionCode"`
 	DateHeure            *Datetime `json:"histoActionDateHeure"`
@@ -326,6 +393,9 @@ type HistoAction struct {
 	UtilisateurTelephone string    `json:"histoActionUtilisateurTelephone"`
 }
 
+// HistoriquesDesActionsUtilisateurs est la structure de données représentant
+// l'historique des actions réalisées par les utilisateurs sur une facture.
+// Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type HistoriquesDesActionsUtilisateurs struct {
 	HistoAction                   []HistoAction `json:"histoAction"`
 	NbResultatsParPageHistoAction int32         `json:"nbResultatsParPageHistoAction"`
@@ -334,6 +404,8 @@ type HistoriquesDesActionsUtilisateurs struct {
 	TotalHistoAction              int32         `json:"totalHistoAction"`
 }
 
+// Evenement est la structure de données représentant un événement
+// sur une facture. Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type Evenement struct {
 	EvenementDateHeure *Datetime `json:"evenementDateHeure"`
 	EvenementId        int64     `json:"evenementId"`
@@ -341,6 +413,9 @@ type Evenement struct {
 	EvenementQui       string    `json:"evenementQui"`
 }
 
+// HistoriquesDesEvenementsComplementaires est la structure de données
+// représentant l'historique des événements complémentaires sur une facture.
+// Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type HistoriquesDesEvenementsComplementaires struct {
 	Evenement                   []Evenement `json:"evenement"`
 	NbResultatsParPageEvenement int32       `json:"nbResultatsParPageEvenement"`
@@ -349,6 +424,8 @@ type HistoriquesDesEvenementsComplementaires struct {
 	TotalEvenement              int32       `json:"totalEvenement"`
 }
 
+// HistoStatut est la structure de données représentant l'historique des statuts
+// d'une facture. Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type HistoStatut struct {
 	Code                 string    `json:"histoStatutCode"`
 	Commentaire          string    `json:"histoStatutCommentaire"`
@@ -360,6 +437,8 @@ type HistoStatut struct {
 	UtilisateurTelephone string    `json:"histoStatutUtilisateurTelephone"`
 }
 
+// HistoriquesDesStatuts est la structure de données représentant l'historique des statuts
+// d'une facture. Elle est utilisée dans la structure ConsulterHistoriqueFacture.
 type HistoriquesDesStatuts struct {
 	HistoStatut                   []HistoStatut `json:"histoStatut"`
 	NbResultatsParPageHistoStatut int32         `json:"nbResultatsParPageHistoStatut"`
@@ -368,7 +447,9 @@ type HistoriquesDesStatuts struct {
 	TotalHistoStatut              int32         `json:"totalHistoStatut"`
 }
 
-type ConsulterHistoriqueResponse struct {
+// ConsulterHistoriqueFactureResponse est la structure de données représentant la réponse
+// de la méthode ConsulterHistoriqueFacture.
+type ConsulterHistoriqueFactureResponse struct {
 	CodeRetour                              int32                                    `json:"codeRetour"`
 	DerniereAction                          *DerniereAction                          `json:"derniereAction"`
 	HistoriquesDesActionsUtilisateurs       *HistoriquesDesActionsUtilisateurs       `json:"historiquesDesActionsUtilisateurs"`
@@ -381,13 +462,15 @@ type ConsulterHistoriqueResponse struct {
 	StatutCourantCode                       string                                   `json:"statutCourantCode"`
 }
 
-func (s *FacturesService) ConsulterHistorique(ctx context.Context, opts ConsulterHistoriqueOptions) (*ConsulterHistoriqueResponse, error) {
+// La méthode ConsulterHistoriqueFacture permet d'afficher l'historique des
+// événements ainsi que le statut actuel d'une facture reçue, à valider ou émise.
+func (s *FacturesService) ConsulterHistoriqueFacture(ctx context.Context, opts ConsulterHistoriqueFactureOptions) (*ConsulterHistoriqueFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/consulter/historique", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	res := new(ConsulterHistoriqueResponse)
+	res := new(ConsulterHistoriqueFactureResponse)
 
 	err = s.client.doRequest(ctx, req, res)
 	if err != nil {

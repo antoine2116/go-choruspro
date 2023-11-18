@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+// CompleterFactureOptions est la structure de données utilisée pour
+// appeler la méthode CompleterFacture.
 type CompleterFactureOptions struct {
 	Commentaire                  string                       `json:"commentaire,omitempty"`
 	IdUtilisateurCourant         int64                        `json:"idUtilisateurCourant,omitempty"`
@@ -12,6 +14,8 @@ type CompleterFactureOptions struct {
 	PiecesJointesComplementaires []*PieceJointeComplementaire `json:"pieceJointeComplementaire,omitempty"`
 }
 
+// CompleterFactureResponse est la structure de données représentant
+// la réponse de la méthode CompleterFacture.
 type CompleterFactureResponse struct {
 	CodeRetour            int    `json:"codeRetour,omitempty"`
 	DateTraitement        *Date  `json:"dateTraitement,omitempty"`
@@ -20,6 +24,9 @@ type CompleterFactureResponse struct {
 	NumeroFacture         string `json:"numeroFacture,omitempty"`
 }
 
+// La méthode CompleterFacture permet de modifier une facture au statut
+// "SUSPENDUE" en ajoutant des pièces jointes et/ou en modifiant le champ
+// "commentaire"
 func (s *FacturesService) CompleterFacture(ctx context.Context, opts CompleterFactureOptions) (*CompleterFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/completer", opts)
 	if err != nil {
@@ -36,6 +43,8 @@ func (s *FacturesService) CompleterFacture(ctx context.Context, opts CompleterFa
 	return res, nil
 }
 
+// RecyclerFactureOptions est la structure de données utilisée pour
+// appeler la méthode RecyclerFacture.
 type RecyclerFactureOptions struct {
 	Commentaire           string                        `json:"commentaire"`
 	Destinataire          *SoumettreFactureDestinataire `json:"destinataire"`
@@ -44,6 +53,8 @@ type RecyclerFactureOptions struct {
 	Reference             *SoumettreFactureReferences   `json:"reference"`
 }
 
+// RecyclerFactureResponse est la structure de données représentant
+// la réponse de la méthode RecyclerFacture.
 type RecyclerFactureResponse struct {
 	CodeRetour            int32  `json:"codeRetour"`
 	DateDepot             *Date  `json:"dateDepot"`
@@ -53,6 +64,8 @@ type RecyclerFactureResponse struct {
 	StatutFacture         string `json:"statutFacture"`
 }
 
+// La méthode RecyclerFacture permet de modifier les données
+// d'acheminement d'une facture au statut "A_Recycler"
 func (s *FacturesService) RecyclerFacture(ctx context.Context, opts RecyclerFactureOptions) (*RecyclerFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/recycler", opts)
 	if err != nil {
@@ -69,6 +82,8 @@ func (s *FacturesService) RecyclerFacture(ctx context.Context, opts RecyclerFact
 	return res, nil
 }
 
+// SoumettreFactureOptions est la structure de données utilisée pour
+// appeler la méthode SoumettreFacture.
 type SoumettreFactureOptions struct {
 	CadreDeFacturation           SoumettreFactureCadreDeFacturation `json:"cadreDeFacturation,omitempty"`
 	Commentaire                  string                             `json:"commentaire,omitempty"`
@@ -86,23 +101,35 @@ type SoumettreFactureOptions struct {
 	References                   SoumettreFactureReferences         `json:"references,omitempty"`
 }
 
+// SoumettreFactureCadreDeFacturation est la structure de données réprésentant
+// le cadre de facturation d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureCadreDeFacturation struct {
 	Code                  CadreFac `json:"codeCadreFacturation,omitempty"`
 	CodeServiceValideur   string   `json:"codeServiceValideur,omitempty"`
 	CodeStructureValideur string   `json:"codeStructureValideur,omitempty"`
 }
 
+// SoumettreFactureDestinataire est la structure de données réprésentant
+// le destinataire d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureDestinataire struct {
 	Code                 string `json:"codeDestinataire,omitempty"`
 	CodeServiceExecutant string `json:"codeServiceExecutant,omitempty"`
 }
 
+// SoumettreFactureFournisseur est la structure de données réprésentant
+// le fournisseur d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureFournisseur struct {
 	CodeCoordonneesBancairesFournisseur int64 `json:"codeCoordonneesBancairesFournisseur,omitempty"`
 	IdFournisseur                       int64 `json:"idFournisseur,omitempty"`
 	IdServiceFournisseur                int64 `json:"idServiceFournisseur,omitempty"`
 }
 
+// SoumettreFactureLignePoste est la structure de données réprésentant
+// une ligne de poste d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureLignePoste struct {
 	Denomination      string  `json:"lignePosteDenomination,omitempty"`
 	MontantRemiseHT   float32 `json:"lignePosteMontantRemiseHT,omitempty"`
@@ -115,6 +142,9 @@ type SoumettreFactureLignePoste struct {
 	Unite             string  `json:"lignePosteUnite,omitempty"`
 }
 
+// SoumettreFactureLigneTva est la structure de données réprésentant
+// une ligne de TVA d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureLigneTva struct {
 	MontantBaseHtParTaux float32 `json:"ligneTvaMontantBaseHtParTaux,omitempty"`
 	MontantTvaParTaux    float32 `json:"ligneTvaMontantTvaParTaux,omitempty"`
@@ -122,6 +152,9 @@ type SoumettreFactureLigneTva struct {
 	TauxManuel           float32 `json:"ligneTvaTauxManuel,omitempty"`
 }
 
+// SoumettreFactureMontantTotal est la structure de données réprésentant
+// le montant total d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureMontantTotal struct {
 	MontantAPayer           float32 `json:"montantAPayer,omitempty"`
 	MontantHtTotal          float32 `json:"montantHtTotal,omitempty"`
@@ -131,6 +164,9 @@ type SoumettreFactureMontantTotal struct {
 	MotifRemiseGlobaleTTC   string  `json:"motifRemiseGlobaleTTC,omitempty"`
 }
 
+// PieceJointeComplementaire est la structure de données réprésentant
+// une pièce jointe complémentaire d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type PieceJointeComplementaire struct {
 	Designation        string `json:"pieceJointeComplementaireDesignation,omitempty"`
 	Id                 int64  `json:"pieceJointeComplementaireId,omitempty"`
@@ -139,11 +175,17 @@ type PieceJointeComplementaire struct {
 	Type               string `json:"pieceJointeComplementaireType,omitempty"`
 }
 
+// SoumettreFacturePJPrincipale est la structure de données réprésentant
+// la pièce jointe principale d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFacturePJPrincipale struct {
 	Designation string `json:"pieceJointePrincipaleDesignation,omitempty"`
 	Id          int64  `json:"pieceJointePrincipaleId,omitempty"`
 }
 
+// SoumettreFactureReferences est la structure de données réprésentant
+// les références d'une facture. Elle est utilisée dans la méthode
+// SoumettreFacture.
 type SoumettreFactureReferences struct {
 	DeviseFacture        string `json:"deviseFacture,omitempty"`
 	ModePaiement         string `json:"modePaiement,omitempty"`
@@ -155,6 +197,8 @@ type SoumettreFactureReferences struct {
 	TypeTva              string `json:"typeTva,omitempty"`
 }
 
+// SoumettreFactureResponse est la structure de données réprésentant
+// la réponse de la méthode SoumettreFacture.
 type SoumettreFactureResponse struct {
 	CodeRetour               int    `json:"codeRetour,omitempty"`
 	DateDepot                *Date  `json:"dateDepot,omitempty"`
@@ -166,6 +210,9 @@ type SoumettreFactureResponse struct {
 	StatutFacture            string `json:"statutFacture,omitempty"`
 }
 
+// La méthode SoumettreFacture permet de soumettre une facture à la
+// solution mutualisée-CPP 2017 en renseignant les données nécessaires
+// à la constitution d'un flux.
 func (s *FacturesService) SoumettreFacture(ctx context.Context, opts SoumettreFactureOptions) (*SoumettreFactureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/soumettre", opts)
 	if err != nil {
@@ -182,29 +229,33 @@ func (s *FacturesService) SoumettreFacture(ctx context.Context, opts SoumettreFa
 	return res, nil
 }
 
-type DeposerFluxFactureOptions struct {
-	AvecSignature        bool        `json:"avecSignature,omitempty"`
-	FichierFlux          string      `json:"fichierFlux,omitempty"`
-	IdUtilisateurCourant int64       `json:"idUtilisateurCourant,omitempty"`
-	NomFichier           string      `json:"nomFichier,omitempty"`
-	SyntaxeFlux          SyntaxeFlux `json:"syntaxeFlux,omitempty"`
+// CorrigerValideurFactureOptions est la structure de données utlisée
+// pour la méthode CorrigerValideurFacture.
+type CorrigerValideurFactureOptions struct {
+	IdFacture                int64  `json:"idFacture"`
+	IdStructure              int64  `json:"idStructure"`
+	IdentifiantStructure     string `json:"identifiantStructure"`
+	TypeIdentifiantStructure string `json:"typeIdentifiantStructure"`
 }
 
-type DeposerFluxFactureResponse struct {
-	CodeRetour      int         `json:"codeRetour,omitempty"`
-	DateDepot       *Date       `json:"dateDepot,omitempty"`
-	Libelle         string      `json:"libelle,omitempty"`
-	NumeroFluxDepot string      `json:"numeroFluxDepot,omitempty"`
-	SyntaxeFlux     SyntaxeFlux `json:"syntaxeFlux,omitempty"`
+// CorrigerValideurFactureResponse est la structure de données réprésentant
+// la réponse de la méthode CorrigerValideurFacture.
+type CorrigerValideurFactureResponse struct {
+	CodeRetour int32  `json:"codeRetour"`
+	IdFacture  int64  `json:"idFacture"`
+	Libelle    string `json:"libelle"`
 }
 
-func (s *FacturesService) DeposerFlux(ctx context.Context, opts DeposerFluxFactureOptions) (*DeposerFluxFactureResponse, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/deposer/flux", opts)
+// La méthode CorrigerValideurFacture permet à un fournisseur de corriger
+// le valideur initialement renseigné sur une facture rejetée pour
+// renseignement d'un mauvais valideur.
+func (s *FacturesService) CorrigerValideurFacture(ctx context.Context, opts CorrigerValideurFactureOptions) (*CorrigerValideurFactureResponse, error) {
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/corriger/valideur/facture", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	res := new(DeposerFluxFactureResponse)
+	res := new(CorrigerValideurFactureResponse)
 
 	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
@@ -214,26 +265,36 @@ func (s *FacturesService) DeposerFlux(ctx context.Context, opts DeposerFluxFactu
 	return res, nil
 }
 
-type CorrigerValideurFactureOptions struct {
-	IdFacture                int64  `json:"idFacture"`
-	IdStructure              int64  `json:"idStructure"`
-	IdentifiantStructure     string `json:"identifiantStructure"`
-	TypeIdentifiantStructure string `json:"typeIdentifiantStructure"`
+// DeposerFluxFactureOptions est la structure de données utlisée
+// pour la méthode DeposerFluxFacture.
+type DeposerFluxFactureOptions struct {
+	AvecSignature        bool        `json:"avecSignature,omitempty"`
+	FichierFlux          string      `json:"fichierFlux,omitempty"`
+	IdUtilisateurCourant int64       `json:"idUtilisateurCourant,omitempty"`
+	NomFichier           string      `json:"nomFichier,omitempty"`
+	SyntaxeFlux          SyntaxeFlux `json:"syntaxeFlux,omitempty"`
 }
 
-type CorrigerValideurFactureResponse struct {
-	CodeRetour int32  `json:"codeRetour"`
-	IdFacture  int64  `json:"idFacture"`
-	Libelle    string `json:"libelle"`
+// DeposerFluxFactureResponse est la structure de données réprésentant
+// la réponse de la méthode DeposerFluxFacture.
+type DeposerFluxFactureResponse struct {
+	CodeRetour      int         `json:"codeRetour,omitempty"`
+	DateDepot       *Date       `json:"dateDepot,omitempty"`
+	Libelle         string      `json:"libelle,omitempty"`
+	NumeroFluxDepot string      `json:"numeroFluxDepot,omitempty"`
+	SyntaxeFlux     SyntaxeFlux `json:"syntaxeFlux,omitempty"`
 }
 
-func (s *FacturesService) CorrigerValideurFacture(ctx context.Context, opts CorrigerValideurFactureOptions) (*CorrigerValideurFactureResponse, error) {
-	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/corriger/valideur/facture", opts)
+// La méthode DeposerFluxFacture permet de déposer un fichier XML ou
+// PDF/A3 permettant de renseigner les données nécessaires à la
+// constitution d'un flux facture.
+func (s *FacturesService) DeposerFluxFacture(ctx context.Context, opts DeposerFluxFactureOptions) (*DeposerFluxFactureResponse, error) {
+	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/deposer/flux", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	res := new(CorrigerValideurFactureResponse)
+	res := new(DeposerFluxFactureResponse)
 
 	err = s.client.doRequest(ctx, req, res)
 	if err != nil {

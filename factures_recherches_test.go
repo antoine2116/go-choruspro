@@ -148,7 +148,7 @@ func TestFacturesService_RechercherFactureParRecipiendaire(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/cpro/factures/v1/rechercher/recipiendaire", func(w http.ResponseWriter, r *http.Request) {
-		v := new(RechercherFactureRecipiendaireOptions)
+		v := new(RechercherFactureParRecipiendaireOptions)
 		assertNilError(t, json.NewDecoder(r.Body).Decode(v))
 		testMethod(t, r, http.MethodPost)
 		w.Write([]byte(`{
@@ -201,7 +201,7 @@ func TestFacturesService_RechercherFactureParRecipiendaire(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	opt := RechercherFactureRecipiendaireOptions{}
+	opt := RechercherFactureParRecipiendaireOptions{}
 	got, err := client.Factures.RechercherFactureParRecipiendaire(ctx, opt)
 
 	if err != nil {
@@ -211,7 +211,7 @@ func TestFacturesService_RechercherFactureParRecipiendaire(t *testing.T) {
 	want := &RechercherFactureParRecipiendaireResponse{
 		CodeRetour: 1,
 		Libelle:    "l",
-		Factures: &[]FactureRecipiendaireRecherche{
+		Factures: &[]FactureParRecipiendaire{
 			{
 				CodeDestinataire:                  "c",
 				CodeFournisseur:                   "c",
@@ -346,7 +346,7 @@ func TestFacturesService_RechercherFactureParValideur(t *testing.T) {
 	want := &RechercherFactureParValideurResponse{
 		CodeRetour: 1,
 		Libelle:    "l",
-		Factures: []FactureValideurRecherche{
+		Factures: []FactureParValideur{
 			{
 				CodeServiceExecutant:        "c",
 				CodeServiceFournisseur:      "c",
@@ -500,7 +500,7 @@ func TestFacturesService_RechercherFactureParFournisseur(t *testing.T) {
 	want := &RechercherFactureParFournisseurResponse{
 		CodeRetour: 1,
 		Libelle:    "l",
-		Factures: []FactureFournisseurRecherche{
+		Factures: []FactureParFournisseur{
 			{
 				AffactureurCode:                         "a",
 				AffactureurRaisonSociale:                "a",

@@ -114,7 +114,7 @@ func TestFacturesService_TraiterRejet(t *testing.T) {
 
 	ctx := context.Background()
 	opt := TraiterRejetOptions{}
-	got, err := client.Factures.TraiterRejet(ctx, opt)
+	got, err := client.Factures.TraiterFacturesRejetees(ctx, opt)
 
 	if err != nil {
 		t.Errorf("Factures.TraiterRejet returned error : %v", err)
@@ -130,7 +130,7 @@ func TestFacturesService_TraiterRejet(t *testing.T) {
 	}
 
 	testNewRequestAndDoRequestFailure(t, "TraiterRejet", client, func() error {
-		_, err := client.Factures.TraiterRejet(ctx, opt)
+		_, err := client.Factures.TraiterFacturesRejetees(ctx, opt)
 		return err
 	})
 }

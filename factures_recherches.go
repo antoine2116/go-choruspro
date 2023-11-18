@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+// RechercherDemandePaiementOptions est la structure de données utilisée pour appeler
+// les méthodes ConsulterFactureParRecipiendaire et ConsulterFactureParValideur.
 type RechercherDemandePaiementOptions struct {
 	CadreFacturation CadreFac `json:"cadreFacturation,omitempty"`
 
@@ -52,42 +54,53 @@ type RechercherDemandePaiementOptions struct {
 	StructureValideur     *StructureValideurParam     `json:"structureValideur,omitempty"`
 }
 
+// StructureDestinataireParam est la structure de données représentant
+// les paramètres de recherche sur la structure destinataire.
+// Elle est utilisée dans la structure RechercherDemandePaiementOptions.
 type StructureDestinataireParam struct {
 	IdStructure              int64  `json:"idStructureDestinataire,omitempty"`
 	IdentifiantStructure     string `json:"identifiantStructureDestinataire,omitempty"`
 	TypeIdentifiantStructure string `json:"typeIdentifiantStructureDestinataire,omitempty"`
 }
 
+// StructureFournisseurParam est la structure de données représentant
+// les paramètres de recherche sur la structure fournisseur.
+// Elle est utilisée dans la structure RechercherDemandePaiementOptions.
 type StructureFournisseurParam struct {
 	IdStructure              int64  `json:"idStructureFournisseur,omitempty"`
 	IdentifiantStructure     string `json:"identifiantStructureFournisseur,omitempty"`
 	TypeIdentifiantStructure string `json:"typeIdentifiantStructureFournisseur,omitempty"`
 }
 
+// StructureMoaParam est la structure de données représentant
+// les paramètres de recherche sur la structure MOA.
+// Elle est utilisée dans la structure RechercherDemandePaiementOptions.
 type StructureMoaParam struct {
 	IdStructure              int64  `json:"idStructureMoa,omitempty"`
 	IdentifiantStructure     string `json:"identifiantStructureMoa,omitempty"`
 	TypeIdentifiantStructure string `json:"typeIdentifiantStructureMoa,omitempty"`
 }
 
+// StructureMoeParam est la structure de données représentant
+// les paramètres de recherche sur la structure MOE.
+// Elle est utilisée dans la structure RechercherDemandePaiementOptions.
 type StructureMoeParam struct {
 	IdStructure              int64  `json:"idStructureMoe,omitempty"`
 	IdentifiantStructure     string `json:"identifiantStructureMoe,omitempty"`
 	TypeIdentifiantStructure string `json:"typeIdentifiantStructureMoe,omitempty"`
 }
 
+// StructureValideurParam est la structure de données représentant
+// les paramètres de recherche sur la structure valideur.
+// Elle est utilisée dans la structure RechercherDemandePaiementOptions.
 type StructureValideurParam struct {
 	IdStructure              int64  `json:"idStructureValideur,omitempty"`
 	IdentifiantStructure     string `json:"identifiantStructureValideur,omitempty"`
 	TypeIdentifiantStructure string `json:"typeIdentifiantStructureValideur,omitempty"`
 }
 
-type RechercherDemandePaiementResponse struct {
-	CodeRetour       int                `json:"codeRetour,omitempty"`
-	Libelle          string             `json:"libelle,omitempty"`
-	DemandesPaiement *[]DemandePaiement `json:"listeDemandePaiement,omitempty"`
-}
-
+// DemandePaie est la structure de données représentant une demande de paiement.
+// Elle est utilisée dans la structure RechercherDemandePaiementResponse.
 type DemandePaiement struct {
 	CadreFacturation                 CadreFac    `json:"cadreFacturation,omitempty"`
 	CodeJuridiction                  string      `json:"codeJuridiction,omitempty"`
@@ -136,6 +149,18 @@ type DemandePaiement struct {
 	TypeFactureTravaux               string      `json:"typeFactureTravaux,omitempty"`
 }
 
+// RechercherDemandePaiementResponse est la structure de données représentant
+// la réponse de la méthode RechercherDemandePaiement.
+type RechercherDemandePaiementResponse struct {
+	CodeRetour       int                `json:"codeRetour,omitempty"`
+	Libelle          string             `json:"libelle,omitempty"`
+	DemandesPaiement *[]DemandePaiement `json:"listeDemandePaiement,omitempty"`
+}
+
+// La méthode RechercherDemandePaiement permet de retourner des demandes de
+// paiement en base archive et en base vivante pour l'utilisateur connecté
+// en fonction de certains critères (service exposé ne fonctionnant pas
+// sur l'espace de qualification).
 func (s *FacturesService) RechercherDemandePaiement(ctx context.Context, opts RechercherDemandePaiementOptions) (*RechercherDemandePaiementResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/rechercher/demandePaiement", opts)
 	if err != nil {
@@ -152,7 +177,10 @@ func (s *FacturesService) RechercherDemandePaiement(ctx context.Context, opts Re
 	return res, nil
 }
 
-type RechercherFactureRecipiendaireOptions struct {
+// RechercherFactureParRecipiendaireOptions est la structure de données représentant
+// les critères de recherche de factures pour un récipiendaire.
+// Elle est utilisée par la méthode RechercherFactureParRecipiendaire.
+type RechercherFactureParRecipiendaireOptions struct {
 	CadreFacturation                  CadreFac           `json:"cadreFacturation,omitempty"`
 	FactureTelechargeeParDestinataire bool               `json:"factureTelechargeeParDestinataire,omitempty"`
 	IdDestinataire                    int64              `json:"idDestinataire,omitempty"`
@@ -184,22 +212,18 @@ type RechercherFactureRecipiendaireOptions struct {
 	TypeDemandePaiement               string             `json:"typeDemandePaiement,omitempty"`
 }
 
+// FournisseurParam est la structure de données représentant
+// les critères de recherche de factures pour un récipiendaire.
+// Elle est utilisée dans la méthode RechercherFactureParRecipiendaire.
 type FournisseurParam struct {
 	IdFournisseur  int64   `json:"idFournisseur,omitempty"`
 	ListeIdService []int64 `json:"listeIdService,omitempty"`
 }
 
-type RechercherFactureParRecipiendaireResponse struct {
-	CodeRetour         int                              `json:"codeRetour,omitempty"`
-	Libelle            string                           `json:"libelle,omitempty"`
-	Factures           *[]FactureRecipiendaireRecherche `json:"listeFactures,omitempty"`
-	NbResultatsParPage int                              `json:"nbResultatsParPage,omitempty"`
-	PageCourante       int                              `json:"pageCourante,omitempty"`
-	Pages              int                              `json:"pages,omitempty"`
-	Total              int                              `json:"total,omitempty"`
-}
-
-type FactureRecipiendaireRecherche struct {
+// FactureParRecipiendaire est la structure de données représentant
+// une facture pour un récipiendaire.
+// Elle est utilisée dans la méthode RechercherFactureParRecipiendaire.
+type FactureParRecipiendaire struct {
 	CodeDestinataire                  string          `json:"codeDestinataire,omitempty"`
 	CodeFournisseur                   string          `json:"codeFournisseur,omitempty"`
 	CodeMOA                           string          `json:"codeMOA,omitempty"`
@@ -237,7 +261,22 @@ type FactureRecipiendaireRecherche struct {
 	TypeIdentifiantMOE                TypeIdentifiant `json:"typeIdentifiantMOE,omitempty"`
 }
 
-func (s *FacturesService) RechercherFactureParRecipiendaire(ctx context.Context, opts RechercherFactureRecipiendaireOptions) (*RechercherFactureParRecipiendaireResponse, error) {
+// RechercherFactureParRecipiendaireResponse est la structure de données représentant
+// la réponse de la méthode RechercherFactureParRecipiendaire.
+type RechercherFactureParRecipiendaireResponse struct {
+	CodeRetour         int                        `json:"codeRetour,omitempty"`
+	Libelle            string                     `json:"libelle,omitempty"`
+	Factures           *[]FactureParRecipiendaire `json:"listeFactures,omitempty"`
+	NbResultatsParPage int                        `json:"nbResultatsParPage,omitempty"`
+	PageCourante       int                        `json:"pageCourante,omitempty"`
+	Pages              int                        `json:"pages,omitempty"`
+	Total              int                        `json:"total,omitempty"`
+}
+
+// La méthode RechercherFactureParRecipiendaire permet d'afficher les factures reçues
+// correspondant aux paramètres de recherche renseignés. Il est notamment possible
+// de sélectionner des factures en fonction de l'état de la facture (téléchargée, non téléchargée).
+func (s *FacturesService) RechercherFactureParRecipiendaire(ctx context.Context, opts RechercherFactureParRecipiendaireOptions) (*RechercherFactureParRecipiendaireResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/rechercher/recipiendaire", opts)
 	if err != nil {
 		return nil, err
@@ -253,6 +292,9 @@ func (s *FacturesService) RechercherFactureParRecipiendaire(ctx context.Context,
 	return res, nil
 }
 
+// RechercherFactureParValideurOptions est la structure de données représentant
+// les critères de recherche de factures pour un valideur.
+// Elle est utilisée dans la méthode RechercherFactureParValideur.
 type RechercherFactureParValideurOptions struct {
 	CadreFacturation           CadreDeFacturation `json:"cadreFacturation"`
 	IdDestinataire             int64              `json:"idDestinataire"`
@@ -285,7 +327,9 @@ type RechercherFactureParValideurOptions struct {
 	TypeDemandePaiement        string             `json:"typeDemandePaiement"`
 }
 
-type FactureValideurRecherche struct {
+// FactureParValideur est la structure de données représentant
+// une facture pour un valideur.
+type FactureParValideur struct {
 	CodeServiceExecutant        string          `json:"codeServiceExecutant"`
 	CodeServiceFournisseur      string          `json:"codeServiceFournisseur"`
 	CodeServiceMoa              string          `json:"codeServiceMoa"`
@@ -333,13 +377,17 @@ type FactureValideurRecherche struct {
 	TypeIdentifiantValideur     TypeIdentifiant `json:"typeIdentifiantValideur"`
 }
 
+// RechercherFactureParValideurResponse est la structure de données représentant
+// la réponse de la méthode RechercherFactureParValideur.
 type RechercherFactureParValideurResponse struct {
-	CodeRetour int32                      `json:"codeRetour"`
-	Libelle    string                     `json:"libelle"`
-	Factures   []FactureValideurRecherche `json:"listeFactures"`
-	Pagination *PaginationResponse        `json:"parametresRetour"`
+	CodeRetour int32                `json:"codeRetour"`
+	Libelle    string               `json:"libelle"`
+	Factures   []FactureParValideur `json:"listeFactures"`
+	Pagination *PaginationResponse  `json:"parametresRetour"`
 }
 
+// Le service rechercherFactureParValideur permet de rechercher, en tant que
+// valideur, les factures et/ou les factures de travaux correspondant aux paramètres.
 func (s *FacturesService) RechercherFactureParValideur(ctx context.Context, opts RechercherFactureParValideurOptions) (*RechercherFactureParValideurResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/rechercher/valideur", opts)
 	if err != nil {
@@ -356,12 +404,18 @@ func (s *FacturesService) RechercherFactureParValideur(ctx context.Context, opts
 	return res, nil
 }
 
+// DestinataireParam est la structure de données représentant
+// les paramètres de recherche d'un destinataire.
+// Elle est utilisée dans la structure RechercherFactureParFournisseurOptions.
 type DestinataireParam struct {
 	IdDestinataire          int64   `json:"idDestinataire"`
 	ListeIdServiceExecutant []int64 `json:"listeIdServiceExecutant"`
 	RaisonSocialeStuctDmd   string  `json:"raisonSocialeStuctDmd"`
 }
 
+// RechercherFactureParFournisseurOptions est la structure de données représentant
+// les critères de recherche d'une facture pour un fournisseur.
+// Elle est utilisée dans la méthode RechercherFactureParFournisseur.
 type RechercherFactureParFournisseurOptions struct {
 	CadreFacturation               CadreDeFacturation  `json:"cadreFacturation"`
 	CoordonneeBancaire             int64               `json:"coordonneeBancaire"`
@@ -397,7 +451,10 @@ type RechercherFactureParFournisseurOptions struct {
 	TypeFacture                    TypeFacture         `json:"typeFacture"`
 }
 
-type FactureFournisseurRecherche struct {
+// FactureParFournisseur est la structure de données représentant
+// une facture pour un fournisseur.
+// Elle est utilisée dans la structure RechercherFactureParFournisseurResponse.
+type FactureParFournisseur struct {
 	AffactureurCode                         string          `json:"affactureurCode"`
 	AffactureurRaisonSociale                string          `json:"affactureurRaisonSociale"`
 	AffactureurTypeIdentifiant              string          `json:"affactureurTypeIdentifiant"`
@@ -453,13 +510,17 @@ type FactureFournisseurRecherche struct {
 	TypeIdentifiantValideur2                TypeIdentifiant `json:"typeIdentifiantValideur2"`
 }
 
+// RechercherFactureParFournisseurResponse est la structure de données représentant
+// la réponse de la méthode RechercherFactureParFournisseur.
 type RechercherFactureParFournisseurResponse struct {
-	CodeRetour int32                         `json:"codeRetour"`
-	Libelle    string                        `json:"libelle"`
-	Factures   []FactureFournisseurRecherche `json:"listeFactures"`
-	Pagination *PaginationResponse           `json:"parametresRetour"`
+	CodeRetour int32                   `json:"codeRetour"`
+	Libelle    string                  `json:"libelle"`
+	Factures   []FactureParFournisseur `json:"listeFactures"`
+	Pagination *PaginationResponse     `json:"parametresRetour"`
 }
 
+// La méthode RechercherFactureParFournisseur permet d'afficher les factures
+// émises correspondant aux paramètres de recherche renseignés.
 func (s *FacturesService) RechercherFactureParFournisseur(ctx context.Context, opts RechercherFactureParFournisseurOptions) (*RechercherFactureParFournisseurResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/rechercher/fournisseur", opts)
 	if err != nil {

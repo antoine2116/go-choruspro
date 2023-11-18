@@ -25,7 +25,7 @@ func TestFacturesService_TelechargerGroupe(t *testing.T) {
 
 	ctx := context.Background()
 	opt := TraiterFactureAValiderOptions{}
-	got, err := client.Factures.TelechargerGroupe(ctx, opt)
+	got, err := client.Factures.TelechargerGroupeFacture(ctx, opt)
 
 	if err != nil {
 		t.Errorf("Factures.TelechargerGroupe returned error : %v", err)
@@ -42,7 +42,7 @@ func TestFacturesService_TelechargerGroupe(t *testing.T) {
 	}
 
 	testNewRequestAndDoRequestFailure(t, "TelechargerGroupe", client, func() error {
-		_, err := client.Factures.TelechargerGroupe(ctx, opt)
+		_, err := client.Factures.TelechargerGroupeFacture(ctx, opt)
 		return err
 	})
 }

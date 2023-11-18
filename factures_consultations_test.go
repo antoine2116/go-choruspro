@@ -1324,7 +1324,7 @@ func TestFacturesService_ConsulterHistorique(t *testing.T) {
 	defer teardown()
 
 	mux.HandleFunc("/cpro/factures/v1/consulter/historique", func(w http.ResponseWriter, r *http.Request) {
-		v := new(ConsulterHistoriqueOptions)
+		v := new(ConsulterHistoriqueFactureOptions)
 		assertNilError(t, json.NewDecoder(r.Body).Decode(v))
 		testMethod(t, r, http.MethodPost)
 		w.Write([]byte(`{
@@ -1392,14 +1392,14 @@ func TestFacturesService_ConsulterHistorique(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	opt := ConsulterHistoriqueOptions{}
-	got, err := client.Factures.ConsulterHistorique(ctx, opt)
+	opt := ConsulterHistoriqueFactureOptions{}
+	got, err := client.Factures.ConsulterHistoriqueFacture(ctx, opt)
 
 	if err != nil {
 		t.Errorf("Factures.ConsulterHistorique returned error : %v", err)
 	}
 
-	want := &ConsulterHistoriqueResponse{
+	want := &ConsulterHistoriqueFactureResponse{
 		CodeRetour: 1,
 		DerniereAction: &DerniereAction{
 			Code: "c",
@@ -1466,7 +1466,7 @@ func TestFacturesService_ConsulterHistorique(t *testing.T) {
 	}
 
 	testNewRequestAndDoRequestFailure(t, "ConsulterHistorique", client, func() error {
-		_, err := client.Factures.ConsulterHistorique(ctx, opt)
+		_, err := client.Factures.ConsulterHistoriqueFacture(ctx, opt)
 		return err
 	})
 }

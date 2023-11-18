@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+// TraiterFactureAValiderOptions est la structure de données utilisée pour appeler
+// la méthode TraiterFactureAValider.
 type TraiterFactureAValiderOptions struct {
 	Action         ActionFacture `json:"action,omitempty"`
 	ComplementInfo string        `json:"complementInfo,omitempty"`
@@ -15,6 +17,8 @@ type TraiterFactureAValiderOptions struct {
 	TypeValideur   string        `json:"typeValideur,omitempty"`
 }
 
+// TraiterFactureAValiderResponse est la réponse renvoyée par la méthode
+// TraiterFactureAValider.
 type TraiterFactureAValiderResponse struct {
 	CodeRetour     int    `json:"codeRetour,omitempty"`
 	DateTraitement *Date  `json:"dateTraitement,omitempty"`
@@ -24,6 +28,8 @@ type TraiterFactureAValiderResponse struct {
 	StatutFacture  string `json:"statutFacture,omitempty"`
 }
 
+// La méthode traiterFactureAValider permet à un valideur de modifier le
+// statut d'une facture à valider en renseignant le cas échéant un motif de refus.
 func (s *FacturesService) TraiterFactureAValider(ctx context.Context, opts TraiterFactureAValiderOptions) (*TraiterFactureAValiderResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/traiter/factureAValider", opts)
 	if err != nil {
@@ -40,6 +46,8 @@ func (s *FacturesService) TraiterFactureAValider(ctx context.Context, opts Trait
 	return res, nil
 }
 
+// TraiterFactureRecueOptions est la structure de données utilisée pour appeler
+// la méthode TraiterFactureRecue.
 type TraiterFactureRecueOptions struct {
 	IdFacture            int64  `json:"idFacture"`
 	IdUtilisateurCourant int64  `json:"idUtilisateurCourant"`
@@ -48,6 +56,8 @@ type TraiterFactureRecueOptions struct {
 	NumeroDPMandat       string `json:"numeroDPMandat"`
 }
 
+// TraiterFactureRecueResponse est la réponse renvoyée par la méthode
+// TraiterFactureRecue.
 type TraiterFactureRecueResponse struct {
 	CodeRetour     int32  `json:"codeRetour"`
 	DateTraitement *Date  `json:"dateTraitement"`
@@ -57,6 +67,9 @@ type TraiterFactureRecueResponse struct {
 	NumeroFacture  string `json:"numeroFacture"`
 }
 
+// La méthode traiterFactureRecue permet de valider, rejeter ou suspendre
+// une facture reçue. Lorsque le récipiendaire rejette ou suspend la facture,
+// il est dans l'obligation de motiver son choix.
 func (s *FacturesService) TraiterFactureRecue(ctx context.Context, opts TraiterFactureRecueOptions) (*TraiterFactureRecueResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/traiter/recue", opts)
 	if err != nil {
@@ -73,22 +86,31 @@ func (s *FacturesService) TraiterFactureRecue(ctx context.Context, opts TraiterF
 	return res, nil
 }
 
+// DemandePaiementParam est la structure de données pour
+// renseigner l'identifiant d'une demande de paiement.
+// Cette structure est utilisée par la méthode TraiterRejet.
 type DemandePaiementParam struct {
 	IdDemandePaiement int64 `json:"idDemandePaiement"`
 }
 
+// TraiterRejetOptions est la structure de données utilisée pour appeler
+// la méthode TraiterRejet.
 type TraiterRejetOptions struct {
 	CpltInfos            string                 `json:"cpltInfos"`
 	ListeDemandePaiement []DemandePaiementParam `json:"listeDemandePaiement"`
 	MotifRejet           string                 `json:"motifRejet"`
 }
 
+// TraiterRejetResponse est la réponse renvoyée par la méthode
+// TraiterRejet.
 type TraiterRejetResponse struct {
 	CodeRetour int32  `json:"codeRetour"`
 	Libelle    string `json:"libelle"`
 }
 
-func (s *FacturesService) TraiterRejet(ctx context.Context, opts TraiterRejetOptions) (*TraiterRejetResponse, error) {
+// La méthode traiterFacturesRejetees a pour objectif d'indiquer, pour les factures
+// ou factures de travaux données, que leur rejet a été traité par le fournisseur
+func (s *FacturesService) TraiterFacturesRejetees(ctx context.Context, opts TraiterRejetOptions) (*TraiterRejetResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/factures/v1/traiterRejet", opts)
 	if err != nil {
 		return nil, err

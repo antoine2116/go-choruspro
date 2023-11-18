@@ -168,7 +168,7 @@ func TestFacturesService_DeposerFlux(t *testing.T) {
 
 	ctx := context.Background()
 	opt := DeposerFluxFactureOptions{}
-	got, err := client.Factures.DeposerFlux(ctx, opt)
+	got, err := client.Factures.DeposerFluxFacture(ctx, opt)
 
 	if err != nil {
 		t.Errorf("Factures.DeposerFlux returned error : %v", err)
@@ -187,7 +187,7 @@ func TestFacturesService_DeposerFlux(t *testing.T) {
 	}
 
 	testNewRequestAndDoRequestFailure(t, "DeposerFlux", client, func() error {
-		_, err := client.Factures.DeposerFlux(ctx, opt)
+		_, err := client.Factures.DeposerFluxFacture(ctx, opt)
 		return err
 	})
 }

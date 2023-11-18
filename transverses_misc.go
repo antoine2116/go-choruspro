@@ -48,7 +48,7 @@ type Devise struct {
 // RecupererDevises permet de récupérer la liste des codes devises pouvant
 // être renseignés lors de la saisie dans une facture. lang est la langue dans
 // laquelle les devises seront retournées. Si lang n'est pas spécifié, la langue
-// / par défaut est le français (CodeLangueFr)
+// par défaut est le français (CodeLangueFr)
 func (s *TransversesService) RecupererDevises(ctx context.Context, lang CodeLangue) (*ListeDevises, error) {
 	opts := &codeLangueOptions{lang}
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/devises", opts)
