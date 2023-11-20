@@ -30,14 +30,14 @@ func (s *TransversesService) RecupererFormatFlux(ctx context.Context) (*ListeFor
 		return nil, err
 	}
 
-	formats := new(ListeFormatsFluxResponse)
+	res := new(ListeFormatsFluxResponse)
 
-	err = s.client.doRequest(ctx, req, formats)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return formats, nil
+	return res, nil
 }
 
 // ConsulterCompteRenduResponse est la structure de données représentant
@@ -73,14 +73,14 @@ func (s *TransversesService) ConsulterCompteRendu(ctx context.Context, opts Cons
 		return nil, err
 	}
 
-	formats := new(ConsulterCompteRenduResponse)
+	res := new(ConsulterCompteRenduResponse)
 
-	err = s.client.doRequest(ctx, req, formats)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return formats, nil
+	return res, nil
 }
 
 // ErreurDemandePaiement est la structure de données représentant
@@ -132,12 +132,12 @@ func (s *TransversesService) ConsulterCompteRenduDetaille(ctx context.Context, o
 		return nil, err
 	}
 
-	formats := new(CompteRenduDetailleResponse)
+	res := new(CompteRenduDetailleResponse)
 
-	err = s.client.doRequest(ctx, req, formats)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return formats, nil
+	return res, nil
 }

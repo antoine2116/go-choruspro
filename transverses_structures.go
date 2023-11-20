@@ -32,14 +32,14 @@ func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx contex
 		return nil, err
 	}
 
-	structures := new(ListeStructuresActivesResponse)
+	res := new(ListeStructuresActivesResponse)
 
-	err = s.client.doRequest(ctx, req, structures)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return structures, nil
+	return res, nil
 }
 
 // La méthode RecupererStructuresActivesFournisseur permet de récupérer
@@ -53,14 +53,14 @@ func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.C
 		return nil, err
 	}
 
-	structures := new(ListeStructuresActivesResponse)
+	res := new(ListeStructuresActivesResponse)
 
-	err = s.client.doRequest(ctx, req, structures)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return structures, nil
+	return res, nil
 }
 
 // La méthode RecupererStructuresActivesDestinataire permet de récupérer
@@ -74,14 +74,14 @@ func (s *TransversesService) RecupererStructuresActivesDestinataire(ctx context.
 		return nil, err
 	}
 
-	structures := new(ListeStructuresActivesResponse)
+	res := new(ListeStructuresActivesResponse)
 
-	err = s.client.doRequest(ctx, req, structures)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return structures, nil
+	return res, nil
 }
 
 // InformationsSIRETResponse est la structure de données représentant
@@ -123,14 +123,14 @@ func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, opt
 		return nil, err
 	}
 
-	infos := new(InformationsSIRETResponse)
+	res := new(InformationsSIRETResponse)
 
-	err = s.client.doRequest(ctx, req, infos)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return infos, nil
+	return res, nil
 }
 
 // ListeDestinatairesResponse est la structure de données représentant
@@ -169,12 +169,12 @@ func (s *TransversesService) RechercherDestinataires(ctx context.Context, opts L
 		return nil, err
 	}
 
-	destinataires := new(ListeDestinatairesResponse)
+	res := new(ListeDestinatairesResponse)
 
-	err = s.client.doRequest(ctx, req, destinataires)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return destinataires, nil
+	return res, nil
 }

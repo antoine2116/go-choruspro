@@ -30,14 +30,14 @@ func (s *TransversesService) RecupererTauxTva(ctx context.Context, lang CodeLang
 		return nil, err
 	}
 
-	taux := new(ListeTauxTvaResponse)
+	res := new(ListeTauxTvaResponse)
 
-	err = s.client.doRequest(ctx, req, taux)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return taux, nil
+	return res, nil
 }
 
 // ListeMotifsExonerationTvaResponse est la structure de données représentant
@@ -65,12 +65,12 @@ func (s *TransversesService) RecupererMotifsExonerationTva(ctx context.Context, 
 		return nil, err
 	}
 
-	motifs := new(ListeMotifsExonerationTvaResponse)
+	res := new(ListeMotifsExonerationTvaResponse)
 
-	err = s.client.doRequest(ctx, req, motifs)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return motifs, nil
+	return res, nil
 }

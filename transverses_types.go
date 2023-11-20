@@ -29,14 +29,14 @@ func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) 
 		return nil, err
 	}
 
-	types := new(ListeTypesDemandePaiementResponse)
+	res := new(ListeTypesDemandePaiementResponse)
 
-	err = s.client.doRequest(ctx, req, types)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return types, nil
+	return res, nil
 }
 
 // ListeTypesFactureTravauxResponse est la structure de données représentant
@@ -64,14 +64,14 @@ func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (
 		return nil, err
 	}
 
-	types := new(ListeTypesFactureTravauxResponse)
+	res := new(ListeTypesFactureTravauxResponse)
 
-	err = s.client.doRequest(ctx, req, types)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return types, nil
+	return res, nil
 }
 
 // ListeTypesIdentifiantsStructureResponse est la structure de données représentant
@@ -98,12 +98,12 @@ func (s *TransversesService) RecupererTypesIdentifiantsStructure(ctx context.Con
 		return nil, err
 	}
 
-	types := new(ListeTypesIdentifiantsStructureResponse)
+	res := new(ListeTypesIdentifiantsStructureResponse)
 
-	err = s.client.doRequest(ctx, req, types)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return types, nil
+	return res, nil
 }

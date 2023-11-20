@@ -34,14 +34,14 @@ func (s *TransversesService) RecupererEtatParTypeDemandePaiement(ctx context.Con
 		return nil, err
 	}
 
-	etats := new(ListeEtatsTypeDemandePaiementResponse)
+	res := new(ListeEtatsTypeDemandePaiementResponse)
 
-	err = s.client.doRequest(ctx, req, etats)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return etats, nil
+	return res, nil
 }
 
 // ListeEtatsTraitementResponse est la structure de données représentant
@@ -73,12 +73,12 @@ func (s *TransversesService) RecupererEtatsPossiblesPourTraitement(ctx context.C
 		return nil, err
 	}
 
-	etats := new(ListeEtatsTraitementResponse)
+	res := new(ListeEtatsTraitementResponse)
 
-	err = s.client.doRequest(ctx, req, etats)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return etats, nil
+	return res, nil
 }

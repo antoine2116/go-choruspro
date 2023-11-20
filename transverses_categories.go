@@ -32,14 +32,14 @@ func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Conte
 		return nil, err
 	}
 
-	categories := new(ListeCategoriesSollicitationResponse)
+	res := new(ListeCategoriesSollicitationResponse)
 
-	err = s.client.doRequest(ctx, req, categories)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return categories, nil
+	return res, nil
 }
 
 // ListeSousCategoriesSollicitationOptions est la structure de données utlisée
@@ -95,12 +95,12 @@ func (s *TransversesService) RechercherSousCategoriesSollicitation(ctx context.C
 		return nil, err
 	}
 
-	categories := new(ListeSousCategoriesSollicitationResponse)
+	res := new(ListeSousCategoriesSollicitationResponse)
 
-	err = s.client.doRequest(ctx, req, categories)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return categories, nil
+	return res, nil
 }

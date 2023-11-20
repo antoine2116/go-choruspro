@@ -70,14 +70,14 @@ func (s *TransversesService) RecupererTypesPieceJointe(ctx context.Context, opts
 		return nil, err
 	}
 
-	types := new(ListeTypesPieceJointeResponse)
+	res := new(ListeTypesPieceJointeResponse)
 
-	err = s.client.doRequest(ctx, req, types)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return types, nil
+	return res, nil
 }
 
 // AjouterPieceResponse est la structure de données représentant
@@ -108,14 +108,14 @@ func (s *TransversesService) AjouterPieceJointe(ctx context.Context, opts Ajoute
 		return nil, err
 	}
 
-	piece := new(AjouterPieceResponse)
+	res := new(AjouterPieceResponse)
 
-	err = s.client.doRequest(ctx, req, piece)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return piece, nil
+	return res, nil
 }
 
 // SupprimerPieceOptions est la structure de données représentant
@@ -160,14 +160,14 @@ func (s *TransversesService) RechercherPiecesJointesStructure(ctx context.Contex
 		return nil, err
 	}
 
-	pieces := new(ListePiecesJointesStructureResponse)
+	res := new(ListePiecesJointesStructureResponse)
 
-	err = s.client.doRequest(ctx, req, pieces)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return pieces, nil
+	return res, nil
 }
 
 // ListePiecesJointesMonCompteResponse est la structure de données représentant
@@ -208,14 +208,14 @@ func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Contex
 		return nil, err
 	}
 
-	pieces := new(ListePiecesJointesMonCompteResponse)
+	res := new(ListePiecesJointesMonCompteResponse)
 
-	err = s.client.doRequest(ctx, req, pieces)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return pieces, nil
+	return res, nil
 }
 
 // TelechargerPieceJointeDemandePaiementOptions est la structure de données utilisée
@@ -285,12 +285,12 @@ func (s *TransversesService) TelechargerPieceJointe(ctx context.Context, opts Te
 		return nil, err
 	}
 
-	piece := new(PieceJointe)
+	res := new(PieceJointe)
 
-	err = s.client.doRequest(ctx, req, piece)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return piece, nil
+	return res, nil
 }

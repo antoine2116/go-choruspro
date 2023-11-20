@@ -20,14 +20,14 @@ func (s *TransversesService) HealthCheck(ctx context.Context) (*HealthCheck, err
 		return nil, err
 	}
 
-	hc := new(HealthCheck)
+	res := new(HealthCheck)
 
-	err = s.client.doRequest(ctx, req, hc)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return hc, nil
+	return res, nil
 }
 
 // ListeDevises réprésente la réponse retournée par
@@ -55,14 +55,14 @@ func (s *TransversesService) RecupererDevises(ctx context.Context, lang CodeLang
 		return nil, err
 	}
 
-	devise := new(ListeDevises)
+	res := new(ListeDevises)
 
-	err = s.client.doRequest(ctx, req, devise)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return devise, nil
+	return res, nil
 }
 
 // Annuaire réprésente la réponse retournée par
@@ -117,14 +117,14 @@ func (s *TransversesService) RecupererModesDepot(ctx context.Context) (*ListeMod
 		return nil, err
 	}
 
-	modes := new(ListeModesDepot)
+	res := new(ListeModesDepot)
 
-	err = s.client.doRequest(ctx, req, modes)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return modes, nil
+	return res, nil
 }
 
 // ListePays réprésente la réponse retournée par TransversesService.RecupererPays
@@ -150,14 +150,14 @@ func (s *TransversesService) RecupererPays(ctx context.Context, lang CodeLangue)
 		return nil, err
 	}
 
-	pays := new(ListePays)
+	res := new(ListePays)
 
-	err = s.client.doRequest(ctx, req, pays)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return pays, nil
+	return res, nil
 }
 
 // ListeMotifsRefusFactureAValider réprésente la réponse retournée par
@@ -188,14 +188,14 @@ func (s *TransversesService) RecupererMotifsRefusFactureAValider(ctx context.Con
 		return nil, err
 	}
 
-	motifs := new(ListeMotifsRefusFactureAValider)
+	res := new(ListeMotifsRefusFactureAValider)
 
-	err = s.client.doRequest(ctx, req, motifs)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return motifs, nil
+	return res, nil
 }
 
 // ListeModesReglement réprésente la réponse retournée par
@@ -222,14 +222,14 @@ func (s *TransversesService) RecupererModesReglement(ctx context.Context) (*List
 		return nil, err
 	}
 
-	modes := new(ListeModesReglement)
+	res := new(ListeModesReglement)
 
-	err = s.client.doRequest(ctx, req, modes)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return modes, nil
+	return res, nil
 }
 
 // ListeCadresFacturation réprésente la réponse retournée par
@@ -259,14 +259,14 @@ func (s *TransversesService) RecupererCadresFacturation(ctx context.Context, typ
 		return nil, err
 	}
 
-	cadres := new(ListeCadresFacturation)
+	res := new(ListeCadresFacturation)
 
-	err = s.client.doRequest(ctx, req, cadres)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return cadres, nil
+	return res, nil
 }
 
 // ListeCoordonnesBancaires réprésente la réponse retournée par
@@ -298,12 +298,12 @@ func (s *TransversesService) RecupererCoordonneesBancairesValides(ctx context.Co
 		return nil, err
 	}
 
-	coord := new(ListeCoordonneesBancaires)
+	res := new(ListeCoordonneesBancaires)
 
-	err = s.client.doRequest(ctx, req, coord)
+	err = s.client.doRequest(ctx, req, res)
 	if err != nil {
 		return nil, err
 	}
 
-	return coord, nil
+	return res, nil
 }
