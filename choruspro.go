@@ -66,8 +66,9 @@ type Client struct {
 	common service
 
 	// Services
-	Transverses  *TransversesService
 	Factures     *FacturesService
+	Structures   *StructuresService
+	Transverses  *TransversesService
 	Utilisateurs *UtilisateursService
 }
 
@@ -105,11 +106,13 @@ func (c *Client) initialize() {
 	c.common.client = c
 	c.BaseUrl, _ = url.Parse(defaultBaseURL)
 	c.AuthUrl, _ = url.Parse(defaultAuthURL)
-	c.Transverses = (*TransversesService)(&c.common)
 	c.Factures = (*FacturesService)(&c.common)
+	c.Structures = (*StructuresService)(&c.common)
+	c.Transverses = (*TransversesService)(&c.common)
 	c.Utilisateurs = (*UtilisateursService)(&c.common)
 }
 
+// newRequest creates an API request for the Chorus Pro API.
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
 	if !strings.HasSuffix(c.BaseUrl.Path, "/") {
 		return nil, fmt.Errorf("BaseURL must have a trailing slash, but %q does not", c.BaseUrl)
@@ -136,6 +139,9 @@ func (c *Client) newRequest(ctx context.Context, method, url string, body interf
 	return req, nil
 }
 
+// doRequest performs an HTTP request to the Chorus Pro API
+// and routes it through the Piste API. It also handles
+// authentication and token refresh.
 func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface{}) error {
 	// Check if token is valid, if not, get a new one
 	if !c.token.Valid() {
@@ -175,6 +181,7 @@ func (c *Client) doRequest(ctx context.Context, req *http.Request, obj interface
 	return json.Unmarshal(data, obj)
 }
 
+// getOAuthToken retrieves an OAuth token from the Piste API
 func getOAuthToken(clientId, clientSecret string, authUrl *url.URL) (*oauth2.Token, error) {
 	u, _ := authUrl.Parse("api/oauth/token")
 	c := http.DefaultClient
