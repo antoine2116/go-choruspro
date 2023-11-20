@@ -66,8 +66,9 @@ type Client struct {
 	common service
 
 	// Services
-	Transverses *TransversesService
-	Factures    *FacturesService
+	Transverses  *TransversesService
+	Factures     *FacturesService
+	Utilisateurs *UtilisateursService
 }
 
 type service struct {
@@ -106,6 +107,7 @@ func (c *Client) initialize() {
 	c.AuthUrl, _ = url.Parse(defaultAuthURL)
 	c.Transverses = (*TransversesService)(&c.common)
 	c.Factures = (*FacturesService)(&c.common)
+	c.Utilisateurs = (*UtilisateursService)(&c.common)
 }
 
 func (c *Client) newRequest(ctx context.Context, method, url string, body interface{}) (*http.Request, error) {
