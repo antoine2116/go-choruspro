@@ -37,7 +37,7 @@ func TestTransversesService_RecupererEtatParTypeDemandePaiement(t *testing.T) {
 		t.Errorf("Transverses.RecupererEtatParTypeDemandePaiement returned error : %v", err)
 	}
 
-	want := &ListeEtatsTypeDemandePaiement{
+	want := &ListeEtatsTypeDemandePaiementResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Etats: []EtatTypeDemandePaiement{{
@@ -56,19 +56,7 @@ func TestTransversesService_RecupererEtatParTypeDemandePaiement(t *testing.T) {
 	})
 }
 
-func TestTransversesService_RecupererEtatParTypeDemandePaiement_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	opt := ListeEtatsTypeDemandePaiementOptions{}
-	_, err := client.Transverses.RecupererEtatParTypeDemandePaiement(ctx, opt)
-
-	if err == nil {
-		t.Errorf("Transverses.RecupererEtatParTypeDemandePaiement returned error: nil")
-	}
-}
-
-func TestTransversesService_RecupererEtatsTraitement(t *testing.T) {
+func TestTransversesService_RecupererEtatsPossiblesPourTraitement(t *testing.T) {
 	client, mux, teardown := setup()
 	defer teardown()
 
@@ -92,12 +80,12 @@ func TestTransversesService_RecupererEtatsTraitement(t *testing.T) {
 
 	ctx := context.Background()
 	opt := ListeEtatsTraitementOptions{"t"}
-	got, err := client.Transverses.RecupererEtatsTraitement(ctx, opt)
+	got, err := client.Transverses.RecupererEtatsPossiblesPourTraitement(ctx, opt)
 	if err != nil {
-		t.Errorf("Transverses.RecupererEtatsTraitement returned error : %v", err)
+		t.Errorf("Transverses.RecupererEtatsPossiblesPourTraitement returned error : %v", err)
 	}
 
-	want := &ListeEtatsTraitement{
+	want := &ListeEtatsTraitementResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Etats: []EtatTraitement{{
@@ -107,23 +95,11 @@ func TestTransversesService_RecupererEtatsTraitement(t *testing.T) {
 		}},
 	}
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Transverses.RecupererEtatsTraitement returned %+v, want %+v", got, want)
+		t.Errorf("Transverses.RecupererEtatsPossiblesPourTraitement returned %+v, want %+v", got, want)
 	}
 
-	testNewRequestAndDoRequestFailure(t, "RecupererEtatsTraitement", client, func() error {
-		_, err := client.Transverses.RecupererEtatsTraitement(ctx, opt)
+	testNewRequestAndDoRequestFailure(t, "RecupererEtatsPossiblesPourTraitement", client, func() error {
+		_, err := client.Transverses.RecupererEtatsPossiblesPourTraitement(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_RecupererEtatsTraitement_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	opt := ListeEtatsTraitementOptions{}
-	_, err := client.Transverses.RecupererEtatsTraitement(ctx, opt)
-
-	if err == nil {
-		t.Errorf("Transverses.RecupererEtatsTraitement returned error: nil")
-	}
 }

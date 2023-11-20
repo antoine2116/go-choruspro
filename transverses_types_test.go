@@ -37,7 +37,7 @@ func TestTransversesService_RecupererTypesDemandePaiement(t *testing.T) {
 		t.Errorf("Transverses.RecupererTypesDemandePaiement returned error : %v", err)
 	}
 
-	want := &ListeTypesDemandePaiement{
+	want := &ListeTypesDemandePaiementResponse{
 		CodeRetour: 0,
 		Libelle:    "GCU_MSG_01_000",
 		Types: []TypeDemandePaiement{
@@ -88,7 +88,7 @@ func TestTransversesService_RecupererTypesFactureTravaux(t *testing.T) {
 		t.Errorf("Transverses.RecupererTypesFactureTravaux returned error : %v", err)
 	}
 
-	want := &ListeTypesFactureTravaux{
+	want := &ListeTypesFactureTravauxResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Types: []TypeFactureTravaux{
@@ -139,7 +139,7 @@ func TestTransversesService_RecupererTypesIdentifiantsStructure(t *testing.T) {
 		t.Errorf("Transverses.RecupererTypesIdentifiantsStructure returned error : %v", err)
 	}
 
-	want := &ListeTypesIdentifiantsStructure{
+	want := &ListeTypesIdentifiantsStructureResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Types: []TypeIdentifiantStructure{

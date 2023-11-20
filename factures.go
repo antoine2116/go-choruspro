@@ -4,6 +4,7 @@ package choruspro
 // API docs : https://developer.aife.economie.gouv.fr/api-catalog-sandbox?filter=Factures
 type FacturesService service
 
+// Action Facture est le type des actions possibles sur une facture
 type ActionFacture string
 
 const (
@@ -15,6 +16,7 @@ const (
 	ActionFactureRejet           ActionFacture = "REJET"
 )
 
+// CadreFac est le type des cadres de facturation
 type CadreFac string
 
 const (
@@ -45,6 +47,7 @@ const (
 	CodeFacA25 CadreFac = "A25_DECOMPTE_GENERAL_DEFINITIF_MOE_PROCEDURE_TACITE"
 )
 
+// RoleUtilisateur est le type des rôles possibles pour un utilisateur
 type RoleUtilisateur string
 
 const (
@@ -55,6 +58,7 @@ const (
 	RoleDestinataire RoleUtilisateur = "DESTINATAIRE"
 )
 
+// TypeFacture est le type des factures
 type TypeFacture string
 
 const (
@@ -63,6 +67,7 @@ const (
 	TypeFactureAcompte TypeFacture = "ACOMPTE"
 )
 
+// TypeTva est le type des TVA
 type TypeTva string
 
 const (
@@ -72,6 +77,7 @@ const (
 	TypeTvaSansTva         TypeTva = "SANS_TVA"
 )
 
+// TypeIdentifiant est le type des identifiants pour identifier un tiers
 type TypeIdentifiant string
 
 const (

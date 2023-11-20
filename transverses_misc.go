@@ -2,7 +2,6 @@ package choruspro
 
 import (
 	"context"
-	"errors"
 	"net/http"
 )
 
@@ -182,21 +181,8 @@ type ListeMotifsRefusFactureAValiderOptions struct {
 	CodeCadreFacturation string `json:"codeCadreFacturationAValider,omitempty"`
 }
 
-func (o *ListeMotifsRefusFactureAValiderOptions) Validate() error {
-	if o.CodeCadreFacturation == "" {
-		return errors.New("CodeCadreFacturation is required")
-	}
-
-	return nil
-}
-
 // RecupererMotifsRefusFactureAValider permet de récupérer la liste des motifs
 func (s *TransversesService) RecupererMotifsRefusFactureAValider(ctx context.Context, opts ListeMotifsRefusFactureAValiderOptions) (*ListeMotifsRefusFactureAValider, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/motifs/refus/Facture/AValider", opts)
 	if err != nil {
 		return nil, err
@@ -303,23 +289,10 @@ type ListeCoordonneesBancairesOptions struct {
 	IdStructure int64 `json:"idStructure,omitempty"`
 }
 
-func (o ListeCoordonneesBancairesOptions) Validate() error {
-	if o.IdStructure == 0 {
-		return errors.New("IdStructure is required")
-	}
-
-	return nil
-}
-
 // RecupererCoordonneesBancairesValides permet de récupérer la liste des
 // coordonnées bancaires renseignées pour une structure à laquelle l'utilisateur
 // courant est rattaché.
 func (s *TransversesService) RecupererCoordonneesBancairesValides(ctx context.Context, opts ListeCoordonneesBancairesOptions) (*ListeCoordonneesBancaires, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/coordbanc/valides", opts)
 	if err != nil {
 		return nil, err

@@ -364,18 +364,6 @@ func TestTransversesService_RecupererMotifsRefusFactureAValider(t *testing.T) {
 	})
 }
 
-func TestTransversesService_RecupererMotifsRefusFactureAValider_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	opt := ListeMotifsRefusFactureAValiderOptions{}
-	_, err := client.Transverses.RecupererMotifsRefusFactureAValider(ctx, opt)
-
-	if err == nil {
-		t.Errorf("Transverses.RecupererMotifsRefusFactureAValider returned error: nil")
-	}
-}
-
 func TestTransversesService_RecupererModesReglement(t *testing.T) {
 	client, mux, teardown := setup()
 	defer teardown()
@@ -523,15 +511,4 @@ func TestTransversesService_RecupererCoordonneesBancairesValides(t *testing.T) {
 		_, err := client.Transverses.RecupererCoordonneesBancairesValides(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_RecupererCoordonneesBancairesValides_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	_, err := client.Transverses.RecupererCoordonneesBancairesValides(ctx, ListeCoordonneesBancairesOptions{})
-
-	if err == nil {
-		t.Errorf("Transverses.RecupererCoordonneesBancairesValides returned error: nil")
-	}
 }

@@ -6,15 +6,6 @@ import (
 	"net/http"
 	"reflect"
 	"testing"
-	"time"
-)
-
-const (
-	referenceTimeStr = `"2023-01-01T00:00:00Z"`
-)
-
-var (
-	referenceTime = time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
 )
 
 func TestTransversesService_RechercherCategoriesSollicitation(t *testing.T) {
@@ -50,7 +41,7 @@ func TestTransversesService_RechercherCategoriesSollicitation(t *testing.T) {
 		t.Errorf("Transverses.RechercherCategoriesSollicitation returned error : %v", err)
 	}
 
-	want := &ListeCategoriesSollicitation{
+	want := &ListeCategoriesSollicitationResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Categories: []CategorieSollicitation{{
@@ -96,8 +87,8 @@ func TestTransversesService_RechercherSousCategoriesSollicitation(t *testing.T) 
 					"ssCategorie": [
 						{
 							"code": "c",
-							"dateCreation": ` + referenceTimeStr + `,
-							"dateDerniereModification": ` + referenceTimeStr + `,
+							"dateCreation": ` + defaultISODateTimeStr + `,
+							"dateDerniereModification": ` + defaultISODateTimeStr + `,
 							"estActif": true,
 							"idTechniqueCategorie": 1,
 							"libelle": "l"
@@ -115,7 +106,7 @@ func TestTransversesService_RechercherSousCategoriesSollicitation(t *testing.T) 
 		t.Errorf("Transverses.RechercherSousCategoriesSollicitation returned error : %v", err)
 	}
 
-	want := &ListeSousCategoriesSollicitation{
+	want := &ListeSousCategoriesSollicitationResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		SousCategories: []SousCategoriesSolliciation{{
@@ -126,8 +117,8 @@ func TestTransversesService_RechercherSousCategoriesSollicitation(t *testing.T) 
 			}},
 			SousCategories: []SousCategorieSollicitation{{
 				Code:                     "c",
-				DateCreation:             &referenceTime,
-				DateDerniereModification: &referenceTime,
+				DateCreation:             &defaultDate,
+				DateDerniereModification: &defaultDate,
 				EstActif:                 true,
 				IdTechnique:              1,
 				Libelle:                  "l",

@@ -40,7 +40,7 @@ func TestTransversesService_RecupererTauxTva(t *testing.T) {
 		t.Errorf("Transverses.RecupererTauxTva returned error : %v", err)
 	}
 
-	want := &ListeTauxTva{
+	want := &ListeTauxTvaResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Taux: []TauxTva{
@@ -96,7 +96,7 @@ func TestTransversesService_RecupererMotifsExonerationTva(t *testing.T) {
 		t.Errorf("Transverses.RecupererMotifsExonerationTva returned error : %v", err)
 	}
 
-	want := &ListeMotifsExonerationTva{
+	want := &ListeMotifsExonerationTvaResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Motifs: []MotifExonerationTva{

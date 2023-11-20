@@ -5,17 +5,23 @@ import (
 	"net/http"
 )
 
-type ListeTypesDemandePaiement struct {
+// ListeTypesDemandePaiementResponse est la structure de données représentant
+// la réponse de la méthode RecupererTypesDemandePaiement.
+type ListeTypesDemandePaiementResponse struct {
 	CodeRetour int32                 `json:"codeRetour"`
 	Libelle    string                `json:"libelle"`
 	Types      []TypeDemandePaiement `json:"listeTypeDemandePaiement"`
 }
 
+// TypeDemandePaiement est la structure de données représentant
+// un type de demande de paiement.
 type TypeDemandePaiement struct {
 	Type string `json:"typeDemandePaiement"`
 }
 
-func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) (*ListeTypesDemandePaiement, error) {
+// La méthode RecupererTypesDemandePaiement permet de récupérer les types de
+// demandes de paiement pouvant être renseignées dans Chorus Pro.
+func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) (*ListeTypesDemandePaiementResponse, error) {
 	opts := struct{}{}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typedp", opts)
@@ -23,7 +29,7 @@ func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) 
 		return nil, err
 	}
 
-	types := new(ListeTypesDemandePaiement)
+	types := new(ListeTypesDemandePaiementResponse)
 
 	err = s.client.doRequest(ctx, req, types)
 	if err != nil {
@@ -33,17 +39,24 @@ func (s *TransversesService) RecupererTypesDemandePaiement(ctx context.Context) 
 	return types, nil
 }
 
-type ListeTypesFactureTravaux struct {
+// ListeTypesFactureTravauxResponse est la structure de données représentant
+// la réponse de la méthode RecupererTypesFactureTravaux.
+type ListeTypesFactureTravauxResponse struct {
 	CodeRetour int32                `json:"codeRetour"`
 	Libelle    string               `json:"libelle"`
 	Types      []TypeFactureTravaux `json:"listeTypeFactureTravaux"`
 }
 
+// TypeFactureTravaux est la structure de données représentant
+// un type de facture de travaux.
 type TypeFactureTravaux struct {
 	Type string `json:"typeFactureTravaux"`
 }
 
-func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (*ListeTypesFactureTravaux, error) {
+// La méthode RecupererTypesFactureTravaux permet de renseigner les éléments
+// de facturations pouvant être renseignés lors du dépôt d'un dossier
+// de facturation de travaux.
+func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (*ListeTypesFactureTravauxResponse, error) {
 	opts := struct{}{}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typefacturetravaux", opts)
@@ -51,7 +64,7 @@ func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (
 		return nil, err
 	}
 
-	types := new(ListeTypesFactureTravaux)
+	types := new(ListeTypesFactureTravauxResponse)
 
 	err = s.client.doRequest(ctx, req, types)
 	if err != nil {
@@ -61,17 +74,23 @@ func (s *TransversesService) RecupererTypesFactureTravaux(ctx context.Context) (
 	return types, nil
 }
 
-type ListeTypesIdentifiantsStructure struct {
+// ListeTypesIdentifiantsStructureResponse est la structure de données représentant
+// la réponse de la méthode RecupererTypesIdentifiantsStructure.
+type ListeTypesIdentifiantsStructureResponse struct {
 	CodeRetour int32                      `json:"codeRetour"`
 	Libelle    string                     `json:"libelle"`
 	Types      []TypeIdentifiantStructure `json:"listeTypeIdentifiant"`
 }
 
+// TypeIdentifiantStructure est la structure de données représentant
+// un type d'identifiant de structure.
 type TypeIdentifiantStructure struct {
 	Type string `json:"typeIdentifiantStructure"`
 }
 
-func (s *TransversesService) RecupererTypesIdentifiantsStructure(ctx context.Context) (*ListeTypesIdentifiantsStructure, error) {
+// La méthode recupererTypeIdentifiantStructure permet de récupérer les types
+// d'identifiants pouvant être renseignés par un fournisseur ou un valideur de facture.
+func (s *TransversesService) RecupererTypesIdentifiantsStructure(ctx context.Context) (*ListeTypesIdentifiantsStructureResponse, error) {
 	opts := struct{}{}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typeidentifiant/structure", opts)
@@ -79,7 +98,7 @@ func (s *TransversesService) RecupererTypesIdentifiantsStructure(ctx context.Con
 		return nil, err
 	}
 
-	types := new(ListeTypesIdentifiantsStructure)
+	types := new(ListeTypesIdentifiantsStructureResponse)
 
 	err = s.client.doRequest(ctx, req, types)
 	if err != nil {

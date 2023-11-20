@@ -44,7 +44,7 @@ func TestTransversesService_RecupererTypesPieceJointe(t *testing.T) {
 		t.Errorf("Transverses.RecupererTypesPieceJointe returned error : %v", err)
 	}
 
-	want := &ListeTypesPieceJointe{
+	want := &ListeTypesPieceJointeResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Types: []TypePieceJointe{
@@ -115,59 +115,6 @@ func TestTransversesService_AjouterPieceJointe(t *testing.T) {
 	})
 }
 
-func TestTransversesService_AjouterPieceJointe_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	tests := []struct {
-		name string
-		opt  AjouterPieceOptions
-	}{
-		{
-			name: "Missing TypeMine",
-			opt: AjouterPieceOptions{
-				Extension: "e",
-				Fichier:   "f",
-				Nom:       "n",
-			},
-		},
-		{
-			name: "Missing Nom",
-			opt: AjouterPieceOptions{
-				Extension: "e",
-				Fichier:   "f",
-				TypeMime:  "t",
-			},
-		},
-		{
-			name: "Missing Extension",
-			opt: AjouterPieceOptions{
-				Fichier:  "f",
-				Nom:      "n",
-				TypeMime: "t",
-			},
-		},
-		{
-			name: "Missing Fichier",
-			opt: AjouterPieceOptions{
-				Extension: "e",
-				Nom:       "n",
-				TypeMime:  "t",
-			},
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			_, err := client.Transverses.AjouterPieceJointe(ctx, test.opt)
-
-			if err == nil {
-				t.Errorf("Transverses.AjouterPieceJointe returned error: nil")
-			}
-		})
-	}
-}
-
 func TestTransversesService_RechercherPiecesJointesStructure(t *testing.T) {
 	client, mux, teardown := setup()
 	defer teardown()
@@ -210,7 +157,7 @@ func TestTransversesService_RechercherPiecesJointesStructure(t *testing.T) {
 		t.Errorf("Transverses.RechercherPiecesJointesStructure returned error : %v", err)
 	}
 
-	want := &ListePiecesJointesStructure{
+	want := &ListePiecesJointesStructureResponse{
 		CodeRetour: 0,
 		Libelle:    "GCU_MSG_01_000",
 		PiecesJointes: []PieceJointeStructure{
@@ -243,17 +190,6 @@ func TestTransversesService_RechercherPiecesJointesStructure(t *testing.T) {
 		_, err := client.Transverses.RechercherPiecesJointesStructure(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_RechercherPiecesJointesStructure_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	_, err := client.Transverses.RechercherPiecesJointesStructure(ctx, ListePiecesJointesStructureOptions{})
-
-	if err == nil {
-		t.Errorf("Transverses.RechercherPiecesJointesStructure returned error: nil")
-	}
 }
 
 func TestTransversesService_RechercherPiecesJointesMonCompte(t *testing.T) {
@@ -295,7 +231,7 @@ func TestTransversesService_RechercherPiecesJointesMonCompte(t *testing.T) {
 		t.Errorf("Transverses.RechercherPiecesJointesMonCompte returned error : %v", err)
 	}
 
-	want := &ListePiecesJointesMonCompte{
+	want := &ListePiecesJointesMonCompteResponse{
 		CodeRetour: 0,
 		Libelle:    "GCU_MSG_01_000",
 		PiecesJointes: []PieceJointeMonCompte{
@@ -325,17 +261,6 @@ func TestTransversesService_RechercherPiecesJointesMonCompte(t *testing.T) {
 		_, err := client.Transverses.RechercherPiecesJointesMonCompte(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_RechercherPiecesJointesMonCompte_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	_, err := client.Transverses.RechercherPiecesJointesMonCompte(ctx, ListePiecesJointesMonCompteOptions{})
-
-	if err == nil {
-		t.Errorf("Transverses.RechercherPiecesJointesMonCompte returned error: nil")
-	}
 }
 
 func TestTransversesService_TelechargerPieceJointe(t *testing.T) {
@@ -372,152 +297,4 @@ func TestTransversesService_TelechargerPieceJointe(t *testing.T) {
 		_, err := client.Transverses.TelechargerPieceJointe(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_TelechargerPieceJointe_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	tests := []struct {
-		opt  TelechargerPieceJointeOptions
-		name string
-	}{
-		{
-			name: "Missing field objet",
-			opt: TelechargerPieceJointeOptions{
-				Objet: "",
-			},
-		},
-		{
-			name: "Fied objet is not supported",
-			opt: TelechargerPieceJointeOptions{
-				Objet: "x",
-			},
-		},
-		{
-			name: "DemandePaiement:Missing field DemanjdePaiement",
-			opt: TelechargerPieceJointeOptions{
-				Objet:           ObjetPJDemandePaiement,
-				DemandePaiement: nil,
-			},
-		},
-		{
-			name: "DemandePaiement:DemanjdePaiement.AvecPJCompltementaires is not OUI or NON",
-			opt: TelechargerPieceJointeOptions{
-				Objet:           ObjetPJDemandePaiement,
-				DemandePaiement: &TelechargerPieceJointeDemandePaiementOptions{AvecPJCompltementaires: "x"},
-			},
-		},
-		{
-			name: "DemandePaiement:DemanjdePaiement.Format is not PDF or PIVOT",
-			opt: TelechargerPieceJointeOptions{
-				Objet: ObjetPJDemandePaiement,
-				DemandePaiement: &TelechargerPieceJointeDemandePaiementOptions{
-					AvecPJCompltementaires: "OUI",
-					Format:                 "x",
-				},
-			},
-		},
-		{
-			name: "DemandePaiement:DemanjdePaiement.ListeFacture is empty",
-			opt: TelechargerPieceJointeOptions{
-				Objet: ObjetPJDemandePaiement,
-				DemandePaiement: &TelechargerPieceJointeDemandePaiementOptions{
-					AvecPJCompltementaires: "OUI",
-					Format:                 "PDF",
-					ListeFacture:           []IdFacture{},
-				},
-			},
-		},
-		{
-			name: "EngagementJuridique:Missing field EngagementJuridique",
-			opt: TelechargerPieceJointeOptions{
-				Objet:               ObjetPJEngagementJuridique,
-				EngagementJuridique: nil,
-			},
-		},
-		{
-			name: "EngagementJuridique:Missing field EngagementJuridique.Numero",
-			opt: TelechargerPieceJointeOptions{
-				Objet:               ObjetPJEngagementJuridique,
-				EngagementJuridique: &TelechargerPieceJointeEngagementJuridiqueOptions{Numero: ""},
-			},
-		},
-		{
-			name: "Sollicitation:Missing field Sollicitation",
-			opt: TelechargerPieceJointeOptions{
-				Objet:         ObjetPJSollicitation,
-				Sollicitation: nil,
-			},
-		},
-		{
-			name: "Sollicitation:Missing field Sollicitation.Id",
-			opt: TelechargerPieceJointeOptions{
-				Objet:         ObjetPJSollicitation,
-				Sollicitation: &TelechargerPieceJointeSollicitationOptions{Id: 0},
-			},
-		},
-		{
-			name: "Sollicitation:Sollcitation.PieceJointeSollicitation is not OUI or NON",
-			opt: TelechargerPieceJointeOptions{
-				Objet: ObjetPJSollicitation,
-				Sollicitation: &TelechargerPieceJointeSollicitationOptions{
-					Id:                       1,
-					PieceJointeSollicitation: "x"},
-			},
-		},
-		{
-			name: "Structure:Missing field Structure",
-			opt: TelechargerPieceJointeOptions{
-				Objet:     ObjetPJStructurePieceJointe,
-				Structure: nil,
-			},
-		},
-		{
-			name: "Structure: Missing fields Structure.Id, Structure.IdentifiantStructure and Structure.TypeIdentifiantStructure",
-			opt: TelechargerPieceJointeOptions{
-				Objet:     ObjetPJStructurePieceJointe,
-				Structure: &TelechargerPieceJointeStructureOptions{},
-			},
-		},
-		{
-			name: "Structure: Structure.Id and Structure.IdentifiantStructure are set at the same time",
-			opt: TelechargerPieceJointeOptions{
-				Objet: ObjetPJStructurePieceJointe,
-				Structure: &TelechargerPieceJointeStructureOptions{
-					Id:              1,
-					Identifiant:     "x",
-					TypeIdentifiant: "x",
-				},
-			},
-		},
-		{
-			name: "Structure: Structure.IdentifiantStructure is set but Structure.TypeIdentifiantStructure is not",
-			opt: TelechargerPieceJointeOptions{
-				Objet: ObjetPJStructurePieceJointe,
-				Structure: &TelechargerPieceJointeStructureOptions{
-					Identifiant: "x",
-				},
-			},
-		},
-		{
-			name: "Structure: Structure.TypeIdentifiantStructure is set but Structure.IdentifiantStructure is not",
-			opt: TelechargerPieceJointeOptions{
-				Objet: ObjetPJStructurePieceJointe,
-				Structure: &TelechargerPieceJointeStructureOptions{
-					TypeIdentifiant: "x",
-				},
-			},
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			_, err := client.Transverses.TelechargerPieceJointe(ctx, test.opt)
-
-			if err == nil {
-				t.Errorf("Transverses.TelechargerPieceJointe returned error: nil")
-			}
-		})
-	}
 }

@@ -2,44 +2,39 @@ package choruspro
 
 import (
 	"context"
-	"errors"
 	"net/http"
 )
 
-type ListeEtatsTypeDemandePaiement struct {
+// ListeEtatsTypeDemandePaiementResponse est la structure de données représentant
+// la réponse de la méthode RecupererEtatParTypeDemandePaiement.
+type ListeEtatsTypeDemandePaiementResponse struct {
 	CodeRetour int32                     `json:"codeRetour"`
 	Libelle    string                    `json:"libelle"`
 	Etats      []EtatTypeDemandePaiement `json:"listeEtatDemandePaiement"`
 }
 
+// EtatTypeDemandePaiement est la structure de données représentant
+// un état de demande de paiement.
 type EtatTypeDemandePaiement struct {
 	Etat string `json:"etatDemandePaiement"`
 }
 
+// ListeEtatsTypeDemandePaiementOptions est la structure de données utlisée
+// pour appeler la méthode RecupererEtatParTypeDemandePaiement.
 type ListeEtatsTypeDemandePaiementOptions struct {
 	TypeDemandePaiement string `json:"typeDemandePaiement,omitempty"`
 }
 
-func (o *ListeEtatsTypeDemandePaiementOptions) Validate() error {
-	if o.TypeDemandePaiement == "" {
-		return errors.New("TypeDemandePaiement is required")
-	}
-
-	return nil
-}
-
-func (s *TransversesService) RecupererEtatParTypeDemandePaiement(ctx context.Context, opts ListeEtatsTypeDemandePaiementOptions) (*ListeEtatsTypeDemandePaiement, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
+// La méthode recupererEtatParTypeDemandePaiement permet de récupérer
+// l'ensemble des statuts pouvant s'appliquer à une demande de paiement
+// en fonction du type de demande de paiement.
+func (s *TransversesService) RecupererEtatParTypeDemandePaiement(ctx context.Context, opts ListeEtatsTypeDemandePaiementOptions) (*ListeEtatsTypeDemandePaiementResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/etat/typedp", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	etats := new(ListeEtatsTypeDemandePaiement)
+	etats := new(ListeEtatsTypeDemandePaiementResponse)
 
 	err = s.client.doRequest(ctx, req, etats)
 	if err != nil {
@@ -49,40 +44,36 @@ func (s *TransversesService) RecupererEtatParTypeDemandePaiement(ctx context.Con
 	return etats, nil
 }
 
-type ListeEtatsTraitement struct {
+// ListeEtatsTraitementResponse est la structure de données représentant
+// la réponse de la méthode RecupererEtatsPossiblesPourTraitement.
+type ListeEtatsTraitementResponse struct {
 	CodeRetour int32            `json:"codeRetour"`
 	Libelle    string           `json:"libelle"`
 	Etats      []EtatTraitement `json:"listeStatutsPossiblesPourTraitement"`
 }
 
+// EtatTraitement est la structure de données représentant
+// le statut possible pour le traitement d'une facture.
 type EtatTraitement struct {
 	Etat string `json:"statutPossiblePourTraitement"`
 }
 
+// ListeEtatsTraitementOptions est la structure de données utlisée
+// pour appeler la méthode RecupererEtatsPossiblesPourTraitement.
 type ListeEtatsTraitementOptions struct {
 	EtatCourant string `json:"statutCourant"`
 }
 
-func (o *ListeEtatsTraitementOptions) Validate() error {
-	if o.EtatCourant == "" {
-		return errors.New("EtatCourant is required")
-	}
-
-	return nil
-}
-
-func (s *TransversesService) RecupererEtatsTraitement(ctx context.Context, opts ListeEtatsTraitementOptions) (*ListeEtatsTraitement, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
+// La méthode RecupererEtatsPossiblesPourTraitement permet de récupérer
+// la liste des statuts pouvant être renseignés par un destinataire souhaitant
+// traiter une facture en fonction du statut actuel de la demande de paiement.
+func (s *TransversesService) RecupererEtatsPossiblesPourTraitement(ctx context.Context, opts ListeEtatsTraitementOptions) (*ListeEtatsTraitementResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/etats/traitement", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	etats := new(ListeEtatsTraitement)
+	etats := new(ListeEtatsTraitementResponse)
 
 	err = s.client.doRequest(ctx, req, etats)
 	if err != nil {

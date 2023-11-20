@@ -6,13 +6,8 @@ import (
 	"time"
 )
 
-type ListeCategoriesSollicitation struct {
-	CodeRetour int32                    `json:"codeRetour"`
-	Libelle    string                   `json:"libelle"`
-	Categories []CategorieSollicitation `json:"listeCategories"`
-	Pagination *PaginationResponse      `json:"parametresRetour"`
-}
-
+// ListeCategoriesSollicitationOptions est la structure de données utlisée
+// pour appeler la méthode RechercherCategoriesSollicitation.
 type ListeCategoriesSollicitationOptions struct {
 	Code       string             `json:"codeCategorie,omitempty"`
 	EstActif   bool               `json:"estActif,omitempty"`
@@ -20,13 +15,24 @@ type ListeCategoriesSollicitationOptions struct {
 	Pagination *PaginationOptions `json:"pagination,omitempty"`
 }
 
-func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Context, opts ListeCategoriesSollicitationOptions) (*ListeCategoriesSollicitation, error) {
+// ListeCategoriesSollicitationResponse est la structure de données représentant
+// la réponse de la méthode RechercherCategoriesSollicitation.
+type ListeCategoriesSollicitationResponse struct {
+	CodeRetour int32                    `json:"codeRetour"`
+	Libelle    string                   `json:"libelle"`
+	Categories []CategorieSollicitation `json:"listeCategories"`
+	Pagination *PaginationResponse      `json:"parametresRetour"`
+}
+
+// La méthode RechercherCategoriesSollicitation permet de rechercher les valeurs
+// du référentiel catégorie Sollicitation paramétrées pour le mode connecté
+func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Context, opts ListeCategoriesSollicitationOptions) (*ListeCategoriesSollicitationResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/categorieSollicitation", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	categories := new(ListeCategoriesSollicitation)
+	categories := new(ListeCategoriesSollicitationResponse)
 
 	err = s.client.doRequest(ctx, req, categories)
 	if err != nil {
@@ -36,24 +42,42 @@ func (s *TransversesService) RechercherCategoriesSollicitation(ctx context.Conte
 	return categories, nil
 }
 
-type ListeSousCategoriesSollicitation struct {
+// ListeSousCategoriesSollicitationOptions est la structure de données utlisée
+// pour appeler la méthode RechercherSousCategoriesSollicitation.
+type ListeSousCategoriesSollicitationOptions struct {
+	Code                 string             `json:"code,omitempty"`
+	EstActif             bool               `json:"estActif,omitempty"`
+	IdTechniqueCategorie int64              `json:"idTechniqueCategorie,omitempty"`
+	Libelle              string             `json:"libelle,omitempty"`
+	PaginationOptions    *PaginationOptions `json:"pagination,omitempty"`
+}
+
+// ListeSousCategoriesSollicitationResponse est la structure de données représentant
+// la réponse de la méthode RechercherSousCategoriesSollicitation.
+type ListeSousCategoriesSollicitationResponse struct {
 	CodeRetour     int32                        `json:"codeRetour"`
 	Libelle        string                       `json:"libelle"`
 	SousCategories []SousCategoriesSolliciation `json:"listeSousCategories"`
 	Pagination     *PaginationResponse          `json:"parametresRetour"`
 }
 
+// SousCategoriesSolliciation est la structure de données représentant
+// des liste de catégories et de sous-catégories de sollicitation.
 type SousCategoriesSolliciation struct {
 	Categories     []CategorieSollicitation     `json:"categorie"`
 	SousCategories []SousCategorieSollicitation `json:"ssCategorie"`
 }
 
+// CategorieSollicitation est la structure de données représentant
+// une catégorie de sollicitation.
 type CategorieSollicitation struct {
 	Code        string `json:"codeCategorie"`
 	Libelle     string `json:"libelleCategorie"`
 	IdTechnique int64  `json:"idTechniqueCategorie"`
 }
 
+// SousCategorieSollicitation est la structure de données représentant
+// une sous-catégorie de sollicitation.
 type SousCategorieSollicitation struct {
 	Code                     string     `json:"code"`
 	DateCreation             *time.Time `json:"dateCreation"`
@@ -63,21 +87,15 @@ type SousCategorieSollicitation struct {
 	Libelle                  string     `json:"libelle"`
 }
 
-type ListeSousCategoriesSollicitationOptions struct {
-	Code                 string             `json:"code,omitempty"`
-	EstActif             bool               `json:"estActif,omitempty"`
-	IdTechniqueCategorie int64              `json:"idTechniqueCategorie,omitempty"`
-	Libelle              string             `json:"libelle,omitempty"`
-	PaginationOptions    *PaginationOptions `json:"pagination,omitempty"`
-}
-
-func (s *TransversesService) RechercherSousCategoriesSollicitation(ctx context.Context, opts ListeSousCategoriesSollicitationOptions) (*ListeSousCategoriesSollicitation, error) {
+// Le service RechercherSousCategoriesSollicitation permet de rechercher les
+// valeurs du référentiel Sous-catégorie Sollicitation paramétrées pour le mode connecté.
+func (s *TransversesService) RechercherSousCategoriesSollicitation(ctx context.Context, opts ListeSousCategoriesSollicitationOptions) (*ListeSousCategoriesSollicitationResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/sousCategorieSollicitation", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	categories := new(ListeSousCategoriesSollicitation)
+	categories := new(ListeSousCategoriesSollicitationResponse)
 
 	err = s.client.doRequest(ctx, req, categories)
 	if err != nil {

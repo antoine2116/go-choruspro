@@ -40,7 +40,7 @@ func TestTransversesService_RecupererStructuresActivesFactureTravaux(t *testing.
 		t.Errorf("Transverses.RecupererStructuresActivesFactureTravaux returned error : %v", err)
 	}
 
-	want := &ListeStrcturesActives{
+	want := &ListeStructuresActivesResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Structures: []StructureActive{
@@ -62,64 +62,6 @@ func TestTransversesService_RecupererStructuresActivesFactureTravaux(t *testing.
 
 	testNewRequestAndDoRequestFailure(t, "RecupererStructuresActivesFactureTravaux", client, func() error {
 		_, err := client.Transverses.RecupererStructuresActivesFactureTravaux(ctx)
-		return err
-	})
-}
-
-func TestTransversesService_RecupererStructuresActivesDestinataireFactureTravaux(t *testing.T) {
-	client, mux, teardown := setup()
-	defer teardown()
-
-	mux.HandleFunc("/cpro/transverses/v1/recuperer/structures/actives/destinataire", func(w http.ResponseWriter, r *http.Request) {
-		v := new(struct{})
-		assertNilError(t, json.NewDecoder(r.Body).Decode(v))
-		testMethod(t, r, http.MethodPost)
-		w.Write([]byte(`{
-			"codeRetour": 0,
-			"libelle": "TRA_MSG_00.000",
-			"listeStructures": [
-				{
-					"idStructureCPP": 1,
-					"identifiant": "1",
-					"designationStructure": "d1"
-				},
-				{
-					"idStructureCPP": 2,
-					"identifiant": "2",
-					"designationStructure": "d2"
-				}
-			]
-		}`))
-	})
-
-	ctx := context.Background()
-	got, err := client.Transverses.RecupererStructuresActivesDestinataireFactureTravaux(ctx)
-	if err != nil {
-		t.Errorf("Transverses.RecupererStructuresActivesFactureTravaux returned error : %v", err)
-	}
-
-	want := &ListeStrcturesActives{
-		CodeRetour: 0,
-		Libelle:    "TRA_MSG_00.000",
-		Structures: []StructureActive{
-			{
-				IdCPP:       1,
-				Identifiant: "1",
-				Designation: "d1",
-			},
-			{
-				IdCPP:       2,
-				Identifiant: "2",
-				Designation: "d2",
-			},
-		},
-	}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("Transverses.RecupererStructuresActivesDestinataireFactureTravaux returned %+v, want %+v", got, want)
-	}
-
-	testNewRequestAndDoRequestFailure(t, "RecupererStructuresActivesDestinataireFactureTravaux", client, func() error {
-		_, err := client.Transverses.RecupererStructuresActivesDestinataireFactureTravaux(ctx)
 		return err
 	})
 }
@@ -156,7 +98,7 @@ func TestTransversesService_RecupererStructuresActivesFournisseur(t *testing.T) 
 		t.Errorf("Transverses.RecupererStructuresActivesFournisseur returned error : %v", err)
 	}
 
-	want := &ListeStrcturesActives{
+	want := &ListeStructuresActivesResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Structures: []StructureActive{
@@ -214,7 +156,7 @@ func TestTransversesService_RecupererStructuresActivesDestinataire(t *testing.T)
 		t.Errorf("Transverses.RecupererStructuresActivesDestinataire returned error : %v", err)
 	}
 
-	want := &ListeStrcturesActives{
+	want := &ListeStructuresActivesResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Structures: []StructureActive{
@@ -278,7 +220,7 @@ func TestTransversesService_ConsulterInformationsSIRET(t *testing.T) {
 		t.Errorf("Transverses.ConsulterInformationsSIRET returned error : %v", err)
 	}
 
-	want := &InformationsSIRET{
+	want := &InformationsSIRETResponse{
 		CodeRetour:                    0,
 		Libelle:                       "l",
 		Adresse:                       "a",
@@ -306,17 +248,6 @@ func TestTransversesService_ConsulterInformationsSIRET(t *testing.T) {
 		_, err := client.Transverses.ConsulterInformationsSIRET(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_ConsulterInformationsSIRET_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	_, err := client.Transverses.ConsulterInformationsSIRET(ctx, ConsulterInformationsSIRETOptions{})
-
-	if err == nil {
-		t.Errorf("Transverses.ConsulterInformationsSIRET returned error: nil")
-	}
 }
 
 func TestTransversesService_RechercherDestinataires(t *testing.T) {
@@ -356,7 +287,7 @@ func TestTransversesService_RechercherDestinataires(t *testing.T) {
 		t.Errorf("Transverses.RechercherDestinataires returned error : %v", err)
 	}
 
-	want := &ListeDestinataires{
+	want := &ListeDestinatairesResponse{
 		CodeRetour: 0,
 		Libelle:    "l",
 		Destinataires: []DestinataireRecherche{

@@ -2,23 +2,29 @@ package choruspro
 
 import (
 	"context"
-	"errors"
 	"net/http"
 )
 
-type ListeStrcturesActives struct {
+// ListeStructuresActivesResponse est la structure de données représentant
+// la réponse de la méthode RecupererStructuresActives.
+type ListeStructuresActivesResponse struct {
 	CodeRetour int32             `json:"codeRetour"`
 	Libelle    string            `json:"libelle"`
 	Structures []StructureActive `json:"listeStructures"`
 }
 
+// StructureActive est la structure de données représentant
+// une structure active.
 type StructureActive struct {
 	Designation string `json:"designationStructure"`
 	IdCPP       int64  `json:"idStructureCPP"`
 	Identifiant string `json:"identifiant"`
 }
 
-func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx context.Context) (*ListeStrcturesActives, error) {
+// La méthode RecupererStructuresActivesFactureTravaux permet de
+// récupérer la liste des structures actives auxquelles un utilisateur
+// est rattaché et habilité à l'espace "factures de travaux".
+func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx context.Context) (*ListeStructuresActivesResponse, error) {
 	opts := struct{}{}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/facturetravaux", opts)
@@ -26,7 +32,7 @@ func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx contex
 		return nil, err
 	}
 
-	structures := new(ListeStrcturesActives)
+	structures := new(ListeStructuresActivesResponse)
 
 	err = s.client.doRequest(ctx, req, structures)
 	if err != nil {
@@ -36,25 +42,10 @@ func (s *TransversesService) RecupererStructuresActivesFactureTravaux(ctx contex
 	return structures, nil
 }
 
-func (s *TransversesService) RecupererStructuresActivesDestinataireFactureTravaux(ctx context.Context) (*ListeStrcturesActives, error) {
-	opts := struct{}{}
-
-	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
-	if err != nil {
-		return nil, err
-	}
-
-	structures := new(ListeStrcturesActives)
-
-	err = s.client.doRequest(ctx, req, structures)
-	if err != nil {
-		return nil, err
-	}
-
-	return structures, nil
-}
-
-func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.Context) (*ListeStrcturesActives, error) {
+// La méthode RecupererStructuresActivesFournisseur permet de récupérer
+// la liste des structures actives auxquelles un utilisateur est rattaché
+// et habilité à l’espace "factures émises".
+func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.Context) (*ListeStructuresActivesResponse, error) {
 	opts := struct{}{}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/fournisseur", opts)
@@ -62,7 +53,7 @@ func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.C
 		return nil, err
 	}
 
-	structures := new(ListeStrcturesActives)
+	structures := new(ListeStructuresActivesResponse)
 
 	err = s.client.doRequest(ctx, req, structures)
 	if err != nil {
@@ -72,7 +63,10 @@ func (s *TransversesService) RecupererStructuresActivesFournisseur(ctx context.C
 	return structures, nil
 }
 
-func (s *TransversesService) RecupererStructuresActivesDestinataire(ctx context.Context) (*ListeStrcturesActives, error) {
+// La méthode RecupererStructuresActivesDestinataire permet de récupérer
+// la liste des structures actives auxquelles un utilisateur est rattaché et
+// habilité à l'espace "factures reçues".
+func (s *TransversesService) RecupererStructuresActivesDestinataire(ctx context.Context) (*ListeStructuresActivesResponse, error) {
 	opts := struct{}{}
 
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/structures/actives/destinataire", opts)
@@ -80,7 +74,7 @@ func (s *TransversesService) RecupererStructuresActivesDestinataire(ctx context.
 		return nil, err
 	}
 
-	structures := new(ListeStrcturesActives)
+	structures := new(ListeStructuresActivesResponse)
 
 	err = s.client.doRequest(ctx, req, structures)
 	if err != nil {
@@ -90,7 +84,9 @@ func (s *TransversesService) RecupererStructuresActivesDestinataire(ctx context.
 	return structures, nil
 }
 
-type InformationsSIRET struct {
+// InformationsSIRETResponse est la structure de données représentant
+// la réponse de la méthode ConsulterInformationsSIRET.
+type InformationsSIRETResponse struct {
 	CodeRetour                    int32  `json:"codeRetour"`
 	Libelle                       string `json:"libelle"`
 	Adresse                       string `json:"adresse,omitempty"`
@@ -111,30 +107,23 @@ type InformationsSIRET struct {
 	SiretPredecesseurSuccesseur   string `json:"siretPredecesseurSuccesseur,omitempty"`
 }
 
+// ConsulterInformationsSIRETOptions est la structure de données utilisée
+// pour appeler la méthode ConsulterInformationsSIRET.
 type ConsulterInformationsSIRETOptions struct {
 	Siret string `json:"siretStructure"`
 }
 
-func (o *ConsulterInformationsSIRETOptions) Validate() error {
-	if o.Siret == "" {
-		return errors.New("siretStructure is required")
-	}
-
-	return nil
-}
-
-func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, opts ConsulterInformationsSIRETOptions) (*InformationsSIRET, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
+// La méthode ConsulterInformationsSIRET permet de récupérer les données
+// de la structure de type SIRET correspondant aux paramètres dans le
+// référentiel de l'INSEE (service exposé ne fonctionnant pas sur
+// l'espace de qualification).
+func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, opts ConsulterInformationsSIRETOptions) (*InformationsSIRETResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/consulter/information/siret", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	infos := new(InformationsSIRET)
+	infos := new(InformationsSIRETResponse)
 
 	err = s.client.doRequest(ctx, req, infos)
 	if err != nil {
@@ -144,13 +133,17 @@ func (s *TransversesService) ConsulterInformationsSIRET(ctx context.Context, opt
 	return infos, nil
 }
 
-type ListeDestinataires struct {
+// ListeDestinatairesResponse est la structure de données représentant
+// la réponse de la méthode RechercherDestinataires.
+type ListeDestinatairesResponse struct {
 	CodeRetour    int32                   `json:"codeRetour"`
 	Libelle       string                  `json:"libelle"`
 	Destinataires []DestinataireRecherche `json:"listeDestinataires"`
 	Pagination    PaginationResponse      `json:"parametresRetour"`
 }
 
+// DestinataireRecherche est la structure de données représentant
+// un destinataire de la liste des destinataires.
 type DestinataireRecherche struct {
 	IdStructureCPP    int64  `json:"idStructureCPP"`
 	Siret             string `json:"siret"`
@@ -159,6 +152,8 @@ type DestinataireRecherche struct {
 	AdresseVille      string `json:"adresseVille,omitempty"`
 }
 
+// ListeDestinatairesOptions est la structure de données utilisée
+// pour appeler la méthode RechercherDestinataires.
 type ListeDestinatairesOptions struct {
 	Identifiant        string             `json:"identifiant,omitempty"`
 	NomVilleCodePostal string             `json:"nomVilleCodePostal,omitempty"`
@@ -166,13 +161,15 @@ type ListeDestinatairesOptions struct {
 	Pagination         *PaginationOptions `json:"parametresRecherche,omitempty"`
 }
 
-func (s *TransversesService) RechercherDestinataires(ctx context.Context, opts ListeDestinatairesOptions) (*ListeDestinataires, error) {
+// La méthode RechercherDestinataires permet de rechercher les
+// informations légales d'une structure publique.
+func (s *TransversesService) RechercherDestinataires(ctx context.Context, opts ListeDestinatairesOptions) (*ListeDestinatairesResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/destinataire", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	destinataires := new(ListeDestinataires)
+	destinataires := new(ListeDestinatairesResponse)
 
 	err = s.client.doRequest(ctx, req, destinataires)
 	if err != nil {

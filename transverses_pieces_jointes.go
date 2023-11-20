@@ -2,11 +2,10 @@ package choruspro
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"net/http"
 )
 
+// TypeObjet est le type de l'objet d'une pièce jointe.
 type TypeObjet string
 
 const (
@@ -27,24 +26,28 @@ const (
 	TypeObjetPjRejetEdi        TypeObjet = "PJ_REJET_EDI"
 )
 
-type ObjectPJ string
+// ObjetPJ est l'ojet d'une pièce jointe.
+type ObjetPJ string
 
 const (
-	ObjetPJDemandePaiement             ObjectPJ = "DEMANDE_PAIEMENT"
-	ObjetPJEngagementJuridique         ObjectPJ = "ENGAGEMENT_JURIDIQUE"
-	ObjetPJSollicitation               ObjectPJ = "SOLLICITATION"
-	ObjetPJStructurePieceJointe        ObjectPJ = "STRUCTURE_PIECEJOINTE"
-	ObjetPJStructureMandat             ObjectPJ = "STRUCTURE_MANDAT"
-	ObjetPJStructureCoordonneeBancaire ObjectPJ = "STRUCTURE_COORDONNEE_BANCAIRE"
-	ObjetPJUtilisateur                 ObjectPJ = "UTILISATEUR"
+	ObjetPJDemandePaiement             ObjetPJ = "DEMANDE_PAIEMENT"
+	ObjetPJEngagementJuridique         ObjetPJ = "ENGAGEMENT_JURIDIQUE"
+	ObjetPJSollicitation               ObjetPJ = "SOLLICITATION"
+	ObjetPJStructurePieceJointe        ObjetPJ = "STRUCTURE_PIECEJOINTE"
+	ObjetPJStructureMandat             ObjetPJ = "STRUCTURE_MANDAT"
+	ObjetPJStructureCoordonneeBancaire ObjetPJ = "STRUCTURE_COORDONNEE_BANCAIRE"
+	ObjetPJUtilisateur                 ObjetPJ = "UTILISATEUR"
 )
 
-type ListeTypesPieceJointe struct {
+// ListeTypesPieceJointeResponse est la structure de données représentant
+// la réponse de la méthode RecupererTypesPieceJointe.
+type ListeTypesPieceJointeResponse struct {
 	CodeRetour int32             `json:"codeRetour"`
 	Libelle    string            `json:"libelle"`
 	Types      []TypePieceJointe `json:"listeTypePieceJointe"`
 }
 
+// TypePieceJointe est le type d'une pièce jointe.
 type TypePieceJointe struct {
 	Code      string    `json:"codeTypePieceJointe"`
 	Libelle   string    `json:"libelleTypePieceJointe"`
@@ -52,18 +55,22 @@ type TypePieceJointe struct {
 	TypeObjet TypeObjet `json:"typeObjet"`
 }
 
+// ListeTypesPieceJointeOptions est la structure de données représentant
+// les options de la méthode RecupererTypesPieceJointe.
 type ListeTypesPieceJointeOptions struct {
 	CodeLangue CodeLangue `json:"codeLangue,omitempty"`
 	TypeObjet  TypeObjet  `json:"typeObjet,omitempty"`
 }
 
-func (s *TransversesService) RecupererTypesPieceJointe(ctx context.Context, opts ListeTypesPieceJointeOptions) (*ListeTypesPieceJointe, error) {
+// La méthode RecupererTypesPieceJointe permet de récupérer le type de pièce-jointe
+// pouvant être déposé en fonction de l'espace sur lequel l'objet peut être rattaché.
+func (s *TransversesService) RecupererTypesPieceJointe(ctx context.Context, opts ListeTypesPieceJointeOptions) (*ListeTypesPieceJointeResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/recuperer/typespj", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	types := new(ListeTypesPieceJointe)
+	types := new(ListeTypesPieceJointeResponse)
 
 	err = s.client.doRequest(ctx, req, types)
 	if err != nil {
@@ -73,12 +80,16 @@ func (s *TransversesService) RecupererTypesPieceJointe(ctx context.Context, opts
 	return types, nil
 }
 
+// AjouterPieceResponse est la structure de données représentant
+// la réponse de la méthode AjouterPieceJointe.
 type AjouterPieceResponse struct {
 	CodeRetour    int32  `json:"codeRetour"`
 	Libelle       string `json:"libelle"`
 	IdPieceJointe int64  `json:"pieceJointeId"`
 }
 
+// AjouterPieceOptions est la structure de données utilisée pour
+// appeler la méthode AjouterPieceJointe.
 type AjouterPieceOptions struct {
 	IdUtilisateurCourant int64  `json:"idUtilisateurCourant,omitempty"`
 	Extension            string `json:"pieceJointeExtension"`
@@ -87,32 +98,11 @@ type AjouterPieceOptions struct {
 	TypeMime             string `json:"pieceJointeTypeMime"`
 }
 
-func (o AjouterPieceOptions) Validate() error {
-	if o.Extension == "" {
-		return errors.New("choruspro: Extension is required")
-	}
-
-	if o.Fichier == "" {
-		return errors.New("choruspro: Fichier is required")
-	}
-
-	if o.Nom == "" {
-		return errors.New("choruspro: Nom is required")
-	}
-
-	if o.TypeMime == "" {
-		return errors.New("choruspro: TypeMime is required")
-	}
-
-	return nil
-}
-
+// La méthode AjouterPieceJointe permet d'ajouter une pièce-jointe au
+// compte utilisateur courant et d'en obtenir l'identifiant technique.
+// La pièce jointe ne doit pas dépasser 10Mo. Si le fichier dépasse cette
+// taille, une erreur 20003 sera remontée.
 func (s *TransversesService) AjouterPieceJointe(ctx context.Context, opts AjouterPieceOptions) (*AjouterPieceResponse, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/ajouter/fichier", opts)
 	if err != nil {
 		return nil, err
@@ -128,13 +118,17 @@ func (s *TransversesService) AjouterPieceJointe(ctx context.Context, opts Ajoute
 	return piece, nil
 }
 
-type ListePiecesJointesStructure struct {
+// SupprimerPieceOptions est la structure de données représentant
+// la réponse de la méthode RechercherPiecesJointesStructure.
+type ListePiecesJointesStructureResponse struct {
 	CodeRetour    int32                  `json:"codeRetour"`
 	Libelle       string                 `json:"libelle"`
 	PiecesJointes []PieceJointeStructure `json:"listePiecesJointes,omitempty"`
 	Pagination    *PaginationResponse    `json:"parametresRetour,omitempty"`
 }
 
+// PieceJointeStructure est la structure de données représentant
+// une pièce jointe rattachée à une structure.
 type PieceJointeStructure struct {
 	Designation            string `json:"pieceJointeDesignation"`
 	Extension              string `json:"pieceJointeExtension"`
@@ -148,6 +142,8 @@ type PieceJointeStructure struct {
 	IdUtilisateur          int64  `json:"pieceJointeUtilisateurId"`
 }
 
+// ListePiecesJointesStructureOptions est la structure de données représentant
+// les options de la méthode RechercherPiecesJointesStructure.
 type ListePiecesJointesStructureOptions struct {
 	CodeLangue             CodeLangue         `json:"codeLangue,omitempty"`
 	IdStructureCPP         int64              `json:"idStructureCPP"`
@@ -156,26 +152,15 @@ type ListePiecesJointesStructureOptions struct {
 	Pagination             *PaginationOptions `json:"parametresRecherche,omitempty"`
 }
 
-func (o ListePiecesJointesStructureOptions) Validate() error {
-	if o.IdStructureCPP == 0 {
-		return errors.New("choruspro: IdStructureCPP is required")
-	}
-
-	return nil
-}
-
-func (s *TransversesService) RechercherPiecesJointesStructure(ctx context.Context, opts ListePiecesJointesStructureOptions) (*ListePiecesJointesStructure, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
+// La méthode RechercherPiecesJointesStructure permet de rechercher une pièce-jointe
+// associée à une structure à laquelle est habilité l'utilisateur.
+func (s *TransversesService) RechercherPiecesJointesStructure(ctx context.Context, opts ListePiecesJointesStructureOptions) (*ListePiecesJointesStructureResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/pj/structure", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	pieces := new(ListePiecesJointesStructure)
+	pieces := new(ListePiecesJointesStructureResponse)
 
 	err = s.client.doRequest(ctx, req, pieces)
 	if err != nil {
@@ -185,13 +170,17 @@ func (s *TransversesService) RechercherPiecesJointesStructure(ctx context.Contex
 	return pieces, nil
 }
 
-type ListePiecesJointesMonCompte struct {
+// ListePiecesJointesMonCompteResponse est la structure de données représentant
+// la réponse de la méthode RechercherPiecesJointesMonCompte.
+type ListePiecesJointesMonCompteResponse struct {
 	CodeRetour    int32                  `json:"codeRetour"`
 	Libelle       string                 `json:"libelle"`
 	PiecesJointes []PieceJointeMonCompte `json:"listePiecesJointes,omitempty"`
 	Pagination    *PaginationResponse    `json:"parametresRetour,omitempty"`
 }
 
+// PieceJointeMonCompte est la structure de données représentant
+// une pièce jointe rattachée à un compte utilisateur.
 type PieceJointeMonCompte struct {
 	Designation   string `json:"pieceJointeDesignation"`
 	Extension     string `json:"pieceJointeExtension"`
@@ -202,6 +191,8 @@ type PieceJointeMonCompte struct {
 	IdUtilisateur int64  `json:"pieceJointeUtilisateurId"`
 }
 
+// ListePiecesJointesMonCompteOptions est la structure de données utilisée
+// pour appeler la méthode RechercherPiecesJointesMonCompte.
 type ListePiecesJointesMonCompteOptions struct {
 	CodeLangue             CodeLangue         `json:"codeLangue,omitempty"`
 	PieceJointeDesignation string             `json:"pieceJointeDesignation,omitempty"`
@@ -209,26 +200,15 @@ type ListePiecesJointesMonCompteOptions struct {
 	Pagination             *PaginationOptions `json:"parametresRecherche,omitempty"`
 }
 
-func (o ListePiecesJointesMonCompteOptions) Validate() error {
-	if o.PieceJointeTypeId == 0 {
-		return errors.New("choruspro: PieceJointeTypeId is required")
-	}
-
-	return nil
-}
-
-func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Context, opts ListePiecesJointesMonCompteOptions) (*ListePiecesJointesMonCompte, error) {
-	err := opts.Validate()
-	if err != nil {
-		return nil, err
-	}
-
+// La méthode RechercherPiecesJointesMonCompte permet de rechercher
+// un fichier associé au compte utilisateur.
+func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Context, opts ListePiecesJointesMonCompteOptions) (*ListePiecesJointesMonCompteResponse, error) {
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/rechercher/pj/moncompte", opts)
 	if err != nil {
 		return nil, err
 	}
 
-	pieces := new(ListePiecesJointesMonCompte)
+	pieces := new(ListePiecesJointesMonCompteResponse)
 
 	err = s.client.doRequest(ctx, req, pieces)
 	if err != nil {
@@ -238,6 +218,8 @@ func (s *TransversesService) RechercherPiecesJointesMonCompte(ctx context.Contex
 	return pieces, nil
 }
 
+// TelechargerPieceJointeDemandePaiementOptions est la structure de données utilisée
+// pour appeler la méthode TelechargerPieceJointeDemandePaiement.
 type TelechargerPieceJointeDemandePaiementOptions struct {
 	// 2 values possible : "OUI" or "NON"
 	AvecPJCompltementaires string        `json:"avecPiecesJointesComplementaires"`
@@ -245,10 +227,15 @@ type TelechargerPieceJointeDemandePaiementOptions struct {
 	ListeFacture           []IdFacture   `json:"listeFacture"`
 }
 
+// IdFacture est la structure de données représentant
+// l'identifiant d'une facture.
 type IdFacture struct {
 	IdFacture int64 `json:"idFacture"`
 }
 
+// TelechargerPieceJointeSollicitationOptions est la structure de données utilisée
+// pour appeler la méthode TelechargerPieceJointe.
+// Elle est utilisée dans la structure TelechargerPieceJointeOptions.
 type TelechargerPieceJointeSollicitationOptions struct {
 	Id int64 `json:"idSollicitation"`
 
@@ -256,104 +243,43 @@ type TelechargerPieceJointeSollicitationOptions struct {
 	PieceJointeSollicitation string `json:"pieceJointeSollicitation"`
 }
 
+// TelechargerPieceJointeEngagementJuridiqueOptions est la structure de données utilisée
+// pour appeler la méthode TelechargerPieceJointe.
+// Elle est utilisée dans la structure TelechargerPieceJointeOptions.
 type TelechargerPieceJointeEngagementJuridiqueOptions struct {
 	Numero string `json:"numeroEngagementJuridique"`
 }
 
+// TelechargerPieceJointeStructureOptions est la structure de données utilisée
+// pour appeler la méthode TelechargerPieceJointe.
+// Elle est utilisée dans la structure TelechargerPieceJointeOptions.
 type TelechargerPieceJointeStructureOptions struct {
 	Id              int64  `json:"idStructure"`
 	Identifiant     string `json:"identifiantStructure"`
 	TypeIdentifiant string `json:"typeIdentifiantStructure"`
 }
 
+// TelechargerPieceJointeOptions est la structure de données utilisée
+// pour appeler la méthode TelechargerPieceJointe.
 type TelechargerPieceJointeOptions struct {
-	Objet               ObjectPJ                                          `json:"objetPieceJointe"`
+	Objet               ObjetPJ                                           `json:"objetPieceJointe"`
 	DemandePaiement     *TelechargerPieceJointeDemandePaiementOptions     `json:"demandePaiement,omitempty"`
 	EngagementJuridique *TelechargerPieceJointeEngagementJuridiqueOptions `json:"engagementJuridique,omitempty"`
 	Sollicitation       *TelechargerPieceJointeSollicitationOptions       `json:"sollicitation,omitempty"`
 	Structure           *TelechargerPieceJointeStructureOptions           `json:"structure,omitempty"`
 }
 
+// PieceJointe est la structure de données représentant
+// une pièce jointe.
 type PieceJointe struct {
 	PieceJointe string `json:"pieceJointe"` // base64 encoded
 }
 
-func (o TelechargerPieceJointeOptions) Validate() error {
-	if o.Objet == "" {
-		return errors.New("choruspro: ObjetPieceJointe is required")
-	}
-
-	// Demande paiement validation
-	if o.Objet == ObjetPJDemandePaiement {
-		if o.DemandePaiement == nil {
-			return fmt.Errorf("choruspro: DemandePaiement is required because ObjetPieceJointe is set to %s", ObjetPJDemandePaiement)
-		}
-
-		if o.DemandePaiement.AvecPJCompltementaires != "OUI" && o.DemandePaiement.AvecPJCompltementaires != "NON" {
-			return errors.New("choruspro: DemandePaiement.AvecPiecesJointesComplementaires must be set to OUI or NON")
-		}
-
-		if o.DemandePaiement.Format != "PDF" && o.DemandePaiement.Format != "PIVOT" {
-			return errors.New("choruspro: DemandePaiement.Format must be set to PDF or PIVOT")
-		}
-
-		if len(o.DemandePaiement.ListeFacture) == 0 {
-			return errors.New("choruspro: DemandePaiement.ListeFacture must contain at least one element")
-		}
-	} else if o.Objet == ObjetPJEngagementJuridique {
-		if o.EngagementJuridique == nil {
-			return fmt.Errorf("choruspro: EngagementJuridique is required because ObjetPieceJointe is set to %s", ObjetPJEngagementJuridique)
-		}
-
-		if o.EngagementJuridique.Numero == "" {
-			return errors.New("choruspro: EngagementJuridique.NumeroEngagementJuridique is required")
-		}
-	} else if o.Objet == ObjetPJSollicitation {
-		if o.Sollicitation == nil {
-			return fmt.Errorf("choruspro: Sollicitation is required because ObjetPieceJointe is set to %s", ObjetPJSollicitation)
-		}
-
-		if o.Sollicitation.Id == 0 {
-			return errors.New("choruspro: Sollicitation.IdSollicitation is required")
-		}
-
-		if o.Sollicitation.PieceJointeSollicitation != "OUI" && o.Sollicitation.PieceJointeSollicitation != "NON" {
-			return errors.New("choruspro: Sollicitation.PieceJointeSollicitation must be set to OUI or NON")
-		}
-	} else if o.Objet == ObjetPJStructurePieceJointe ||
-		o.Objet == ObjetPJStructureMandat ||
-		o.Objet == ObjetPJStructureCoordonneeBancaire {
-		if o.Structure == nil {
-			return fmt.Errorf("choruspro: Structure is required because ObjetPieceJointe is set to %s", o.Objet)
-		}
-
-		if o.Structure.Id == 0 && (o.Structure.Identifiant == "" && o.Structure.TypeIdentifiant == "") {
-			return errors.New("choruspro: Structure.IdStructure or Structure.IdentifiantStructure + Structure.TypeIdentifiantStructure are required")
-		}
-
-		if o.Structure.Id != 0 && (o.Structure.Identifiant != "" || o.Structure.TypeIdentifiant != "") {
-			return errors.New("choruspro: Structure.IdStructure and Structure.IdentifiantStructure + Structure.TypeIdentifiantStructure are mutually exclusive")
-		}
-
-		if o.Structure.Identifiant != "" && o.Structure.TypeIdentifiant == "" {
-			return errors.New("choruspro: Structure.TypeIdentifiantStructure is required when Structure.IdentifiantStructure is set")
-		}
-
-		if o.Structure.Identifiant == "" && o.Structure.TypeIdentifiant != "" {
-			return errors.New("choruspro: Structure.IdentifiantStructure is required when Structure.TypeIdentifiantStructure is set")
-		}
-	} else {
-		return fmt.Errorf("choruspro: ObjetPieceJointe %s is not supported", o.Objet)
-	}
-
-	return nil
-}
-
+// La méthode TelechargerPieceJointe permet à un utilisateur de télécharger
+// les pieces jointes des types objets suivants : sollicitation, demande de
+// remboursement, facture, facture travaux, mémoire, coordonnée bancaire,
+// structure, mandat, utilisateur (courant), engagement juridique.
 func (s *TransversesService) TelechargerPieceJointe(ctx context.Context, opts TelechargerPieceJointeOptions) (*PieceJointe, error) {
-	if err := opts.Validate(); err != nil {
-		return nil, err
-	}
-
 	req, err := s.client.newRequest(ctx, http.MethodPost, "cpro/transverses/v1/telecharger/pieceJointe", opts)
 	if err != nil {
 		return nil, err

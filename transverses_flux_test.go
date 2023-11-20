@@ -37,7 +37,7 @@ func TestTransversesService_RecupererFormatFlux(t *testing.T) {
 		t.Errorf("Transverses.RecupererFormatFlux returned error : %v", err)
 	}
 
-	want := &ListeFormatsFlux{
+	want := &ListeFormatsFluxResponse{
 		CodeRetour: 0,
 		Libelle:    "TRA_MSG_00.000",
 		Formats: []FormatFlux{{
@@ -68,8 +68,8 @@ func TestTransversesService_ConsulterCompteRendu(t *testing.T) {
 			"codeAppliPartenaire": "cap",
 			"codeInterfaceFlux": "cif",
 			"codeRetour": 0,
-			"dateDepotFlux": ` + referenceTimeStr + `,
-			"dateHeureEtatCourantFlux": ` + referenceTimeStr + `,
+			"dateDepotFlux": ` + defaultISODateTimeStr + `,
+			"dateHeureEtatCourantFlux": ` + defaultISODateTimeStr + `,
 			"designationPartenaire": "dp",
 			"etatCourantFlux": "ecl",
 			"fichierCR": "f",
@@ -87,12 +87,12 @@ func TestTransversesService_ConsulterCompteRendu(t *testing.T) {
 		t.Errorf("Transverses.ConsulterCompteRendu returned error : %v", err)
 	}
 
-	want := &CompteRendu{
+	want := &ConsulterCompteRenduResponse{
 		CodeAppliPartenaire:      "cap",
 		CodeInterfaceFlux:        "cif",
 		CodeRetour:               0,
-		DateDepotFlux:            &referenceTime,
-		DateHeureEtatCourantFlux: &referenceTime,
+		DateDepotFlux:            &defaultDate,
+		DateHeureEtatCourantFlux: &defaultDate,
 		DesignationPartenaire:    "dp",
 		EtatCourantFlux:          "ecl",
 		FichierCR:                "f",
@@ -110,17 +110,6 @@ func TestTransversesService_ConsulterCompteRendu(t *testing.T) {
 	})
 }
 
-func TestTransversesService_ConsulterCompteRendu_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	_, err := client.Transverses.ConsulterCompteRendu(ctx, ConsulterCompteRenduOptions{})
-
-	if err == nil {
-		t.Errorf("Transverses.ConsulterCompteRendu returned error: nil")
-	}
-}
-
 func TestTransversesService_ConsulterCompteRenduDetaille(t *testing.T) {
 	client, mux, teardown := setup()
 	defer teardown()
@@ -132,8 +121,8 @@ func TestTransversesService_ConsulterCompteRenduDetaille(t *testing.T) {
 		w.Write([]byte(`{
 			"codeInterfaceDepotFlux": "cidf",
 			"codeRetour": 0,
-			"dateDepotFlux": ` + referenceTimeStr + `,
-			"dateHeureEtatCourantFlux": ` + referenceTimeStr + `,
+			"dateDepotFlux": ` + defaultISODateTimeStr + `,
+			"dateHeureEtatCourantFlux": ` + defaultISODateTimeStr + `,
 			"etatCourantDepotFlux": "ecdf",
 			"libelle": "l",
 			"nomFichier": "nf",
@@ -164,11 +153,11 @@ func TestTransversesService_ConsulterCompteRenduDetaille(t *testing.T) {
 		t.Errorf("Transverses.ConsulterCompteRenduDetaille returned error : %v", err)
 	}
 
-	want := &CompteRenduDetaille{
+	want := &CompteRenduDetailleResponse{
 		CodeInterfaceDepotFlux:   "cidf",
 		CodeRetour:               0,
-		DateDepotFlux:            &referenceTime,
-		DateHeureEtatCourantFlux: &referenceTime,
+		DateDepotFlux:            &defaultDate,
+		DateHeureEtatCourantFlux: &defaultDate,
 		EtatCourantDepotFlux:     "ecdf",
 		Libelle:                  "l",
 		NomFichier:               "nf",
@@ -196,15 +185,4 @@ func TestTransversesService_ConsulterCompteRenduDetaille(t *testing.T) {
 		_, err := client.Transverses.ConsulterCompteRenduDetaille(ctx, opt)
 		return err
 	})
-}
-
-func TestTransversesService_ConsulterCompteRenduDetaille_MissingOption(t *testing.T) {
-	client, _, _ := setup()
-
-	ctx := context.Background()
-	_, err := client.Transverses.ConsulterCompteRenduDetaille(ctx, ConsulterCompteRenduDetailleOptions{})
-
-	if err == nil {
-		t.Errorf("Transverses.ConsulterCompteRenduDetaille returned error: nil")
-	}
 }
