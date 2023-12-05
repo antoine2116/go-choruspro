@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/antoine2116/go-choruspro/graph/badge.svg?token=E35WE8EF7Y)](https://codecov.io/gh/antoine2116/go-choruspro)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-go-choruspro is a [Go](https://go.dev/) client library for acessing the [ChorusPro API](https://api.gouv.fr/les-api/chorus-pro).
+go-choruspro is a [Go](https://go.dev/) client library for accessing the [ChorusPro API](https://api.gouv.fr/les-api/chorus-pro).
 
 > Chorus Pro is the shared invoicing solution that has been set up for all suppliers (private or public) in the public sector (State, local authorities, etc.) to meet the legal requirements for electronic invoicing.
 > (translated from [economie.gouv.fr](https://www.economie.gouv.fr/cedef/chorus-pro-aide#:~:text=Chorus%20Pro%20est%20la%20solution,en%20mati%C3%A8re%20de%20facturation%20%C3%A9lectronique.))
